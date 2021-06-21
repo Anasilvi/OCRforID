@@ -2,6 +2,7 @@ import cv2
 import pytesseract
 import numpy as np
 import os
+import datetime
 from pytesseract import Output
 
 #Reading the image from path
@@ -76,6 +77,6 @@ for i in range(n_boxes):
     cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
 
-
+cv2.imwrite(((os.path.dirname(os.path.realpath(__file__))+"\\results\\image"+str(datetime.datetime.now().timestamp())+".jpg")), img)
 cv2.imshow('img', img)
 cv2.waitKey(0)
