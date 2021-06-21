@@ -1,10 +1,11 @@
 import cv2
 import pytesseract
 import numpy as np
+import os
 from pytesseract import Output
 
 #Reading the image from path
-img = cv2.imread('C:/Users/anasi/Dropbox/MSc HCI/Summer 2021/HCI 584/Test images/image.jpg')
+img = cv2.imread(((os.path.dirname(os.path.realpath(__file__))+"\\images\\image.jpg")))
 
 
 # get grayscale image
