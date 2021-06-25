@@ -4,10 +4,11 @@ import numpy as np
 import os
 import datetime
 from pytesseract import Output
+import csv
 
 #Reading the image from path
 img = cv2.imread(((os.path.dirname(os.path.realpath(__file__))+"\\images\\image.jpg")))
-
+results = []
 
 # get grayscale image
 def get_grayscale(image):
@@ -67,15 +68,28 @@ img = remove_noise(img)
 img = thresholding(img)
 
 #Print the text in the console
-print(pytesseract.image_to_string(img, lang="spa"))
+#print(pytesseract.image_to_string(img, lang="spa"))
 
 #Show the converted image and the words recognized with boxes
-d = pytesseract.image_to_data(img, output_type=Output.DICT)
+d = pytesseract.image_to_data(img, "spa",output_type=Output.DICT)
 n_boxes = len(d['level'])
+
 for i in range(n_boxes):
     (x, y, w, h) = (d['left'][i], d['top'][i], d['width'][i], d['height'][i])
-    cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
+    i_word = d['text'][i]
+    i_position = (x, y), (x + w, y + h)
+    i_confidence = d['conf'][i]
+    if int(i_confidence) > 0 and len(i_word.strip()) >0:
+        cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
+        results.append([i_word, i_position, i_confidence])
+    
 
+with open(((os.path.dirname(os.path.realpath(__file__))+"\\results\\text"+str(datetime.datetime.now().timestamp())+".csv")), mode='w', newline='') as csv_file:
+    csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+    csv_writer.writerow(['word', 'position', 'confidence'])
+    for x in range(len(results)):
+       csv_writer.writerow([results[x][0], results[x][1], results[x][2]])
+    
 
 cv2.imwrite(((os.path.dirname(os.path.realpath(__file__))+"\\results\\image"+str(datetime.datetime.now().timestamp())+".jpg")), img)
 cv2.imshow('img', img)
