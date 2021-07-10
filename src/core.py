@@ -5,10 +5,12 @@ import os
 import datetime
 from pytesseract import Output
 import csv
+from statistics import mean
 
 #Reading the image from path
-img = cv2.imread(((os.path.dirname(os.path.realpath(__file__))+"\\images\\image.jpg")))
+imgOriginal = cv2.imread(((os.path.dirname(os.path.realpath(__file__))+"\\images\\template.jpg")))
 results = []
+minCI = 90
 
 # get grayscale image
 def get_grayscale(image):
@@ -63,34 +65,130 @@ def match_template(image, template):
 
 
 #Converting the original image 
-img = get_grayscale(img)
+img = get_grayscale(imgOriginal)
 img = remove_noise(img)
 img = thresholding(img)
 
-#Print the text in the console
-#print(pytesseract.image_to_string(img, lang="spa"))
 
-#Show the converted image and the words recognized with boxes
-d = pytesseract.image_to_data(img, "spa",output_type=Output.DICT)
-n_boxes = len(d['level'])
 
-for i in range(n_boxes):
-    (x, y, w, h) = (d['left'][i], d['top'][i], d['width'][i], d['height'][i])
-    i_word = d['text'][i]
-    i_position = (x, y), (x + w, y + h)
-    i_confidence = d['conf'][i]
-    if int(i_confidence) > 0 and len(i_word.strip()) >0:
-        cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
-        results.append([i_word, i_position, i_confidence])
     
 
-with open(((os.path.dirname(os.path.realpath(__file__))+"\\results\\text"+str(datetime.datetime.now().timestamp())+".csv")), mode='w', newline='') as csv_file:
-    csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-    csv_writer.writerow(['word', 'position', 'confidence'])
-    for x in range(len(results)):
-       csv_writer.writerow([results[x][0], results[x][1], results[x][2]])
+#with open(((os.path.dirname(os.path.realpath(__file__))+"\\results\\text"+str(datetime.datetime.now().timestamp())+".csv")), mode='w', newline='') as csv_file:
+ #   csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+  #  csv_writer.writerow(['word', 'position', 'confidence'])
+   # for x in range(len(results)):
+    #   csv_writer.writerow([results[x][0], results[x][1], results[x][2]])
+    
+def readID():
+    #Reading ID
+    roi = img[105:140,5:215]
+    text = pytesseract.image_to_string(roi, lang='spa', config='digits')
+    print(text.strip())
+    txtconf = pytesseract.image_to_data(roi, "spa",output_type=Output.DICT)
+ 
+    #Calculating the confidence level, mean of the CI per character
+    txtconf = [int(i) for i in txtconf['conf'] if i != '-1' ]
+    print(txtconf)
+    conf = mean(txtconf)
+    print(conf)
+    if conf >= minCI:
+        cv2.rectangle(imgOriginal, (5,105), (215,140), (0, 255, 0), 2)
+    else:
+        cv2.rectangle(imgOriginal, (5,105), (215,140), (0, 0, 255), 2)
+    
+def readNames():
+    #Reading Names
+    roi = img[100:145,235:470]
+    text = pytesseract.image_to_string(roi, config="-l spa")
+    print(text.strip().replace("\n", " "))
+    txtconf = pytesseract.image_to_data(roi, "spa",output_type=Output.DICT)
+ 
+    #Calculating the confidence level, mean of the CI per character
+    txtconf = [int(i) for i in txtconf['conf'] if i != '-1' ]
+    print(txtconf)
+    conf = mean(txtconf)
+    print(conf)
+    if conf >= minCI:
+        cv2.rectangle(imgOriginal, (235,100), (470,145), (0, 255, 0), 2)
+    else:
+        cv2.rectangle(imgOriginal, (235,100), (470,145), (0, 0, 255), 2)
     
 
+def readFamilyNames():
+    #Reading Family Names
+    roi = img[160:205,235:470]
+    text = pytesseract.image_to_string(roi, config="-l spa")
+    print(text.strip().replace("\n", " "))
+    txtconf = pytesseract.image_to_data(roi, "spa",output_type=Output.DICT)
+ 
+    #Calculating the confidence level, mean of the CI per character
+    txtconf = [int(i) for i in txtconf['conf'] if i != '-1' ]
+    print(txtconf)
+    conf = mean(txtconf)
+    print(conf)
+    if conf >= minCI:
+        cv2.rectangle(imgOriginal, (235,160), (470,205), (0, 255, 0), 2)
+    else:
+        cv2.rectangle(imgOriginal, (235,160), (470,205), (0, 0, 255), 2)
+
+def readGender():
+    #Reading Gender
+    roi = img[235:265,235:365]
+    text = pytesseract.image_to_string(roi, config="-l spa")
+    print(text.strip().replace("\n", " "))
+    txtconf = pytesseract.image_to_data(roi, "spa",output_type=Output.DICT)
+ 
+    #Calculating the confidence level, mean of the CI per character
+    txtconf = [int(i) for i in txtconf['conf'] if i != '-1' ]
+    print(txtconf)
+    conf = mean(txtconf)
+    print(conf)
+    if conf >= minCI:
+        cv2.rectangle(imgOriginal, (235,235), (365,265), (0, 255, 0), 2)
+    else:
+        cv2.rectangle(imgOriginal, (235,235), (365,265), (0, 0, 255), 2)
+
+def readNationality():
+    #Reading Nationality
+    roi = img[280:305,235:470]
+    text = pytesseract.image_to_string(roi, config="-l spa")
+    print(text.strip().replace("\n", " "))
+    txtconf = pytesseract.image_to_data(roi, "spa",output_type=Output.DICT)
+
+    #Calculating the confidence level, mean of the CI per character
+    txtconf = [int(i) for i in txtconf['conf'] if i != '-1' ]
+    print(txtconf)
+    conf = mean(txtconf)
+    print(conf)
+    if conf >= minCI:
+        cv2.rectangle(imgOriginal, (235,280), (470,305), (0, 255, 0), 2)
+    else:
+        cv2.rectangle(imgOriginal, (235,280), (470,305), (0, 0, 255), 2)
+    
+def readDOB():
+    #Reading Date of Birth
+    roi = img[325:350,235:360]
+    text = pytesseract.image_to_string(roi, config="-l spa")
+    print(text.strip().replace("\n", " "))
+    txtconf = pytesseract.image_to_data(roi, "spa",output_type=Output.DICT)
+
+    #Calculating the confidence level, mean of the CI per character
+    txtconf = [int(i) for i in txtconf['conf'] if i != '-1' ]
+    print(txtconf)
+    conf = mean(txtconf)
+    print(conf)
+    if conf >= minCI:
+        cv2.rectangle(imgOriginal, (235,325), (360,350), (0, 255, 0), 2)
+    else:
+       cv2.rectangle(imgOriginal, (235,325), (360,350), (0, 0, 255), 2)
+    
+
+readID()
+readNames()
+readFamilyNames()
+readGender()
+readNationality()
+readDOB()
 cv2.imwrite(((os.path.dirname(os.path.realpath(__file__))+"\\results\\image"+str(datetime.datetime.now().timestamp())+".jpg")), img)
-cv2.imshow('img', img)
+cv2.imshow('img', imgOriginal)
 cv2.waitKey(0)
