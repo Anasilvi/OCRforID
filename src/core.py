@@ -8,9 +8,13 @@ import csv
 from statistics import mean
 
 #Reading the image from path
-imgOriginal = cv2.imread(((os.path.dirname(os.path.realpath(__file__))+"\\images\\template.jpg")))
+imgOriginal = cv2.imread(((os.path.dirname(os.path.realpath(__file__))+"\\images\\image4.jpg")))
+imgTemplate = cv2.imread(((os.path.dirname(os.path.realpath(__file__))+"\\images\\template.jpg")))
 results = []
 minCI = 90
+deltaX = 0
+deltaY = 0
+
 
 # get grayscale image
 def get_grayscale(image):
@@ -61,11 +65,54 @@ def deskew(image):
 
 #template matching
 def match_template(image, template):
-    return cv2.matchTemplate(image, template, cv2.TM_CCOEFF_NORMED) 
+    h, w = template.shape[:2]
+    res = cv2.matchTemplate(image,template,1)
+    min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
+    top_left = min_loc
+    dX = top_left[0]
+    dY = top_left[1]
+    bottom_right = (top_left[0]+w, top_left[1]+h)
+    found = image[top_left[1]:bottom_right[1],top_left[0]:bottom_right[0]]
+    imgP = cv2.rectangle(image,top_left, bottom_right, 255, 2)
+    return found, imgP, dX, dY
+   
+
+#Re-scaling the image
+def reScaling(image):
+    h, w = image.shape[:2]
+    #calculate the 50 percent of original dimensions
+    width = int((490 / h)*w)
+    height = int(490)
+
+    # dsize
+    dsize = (width, height)
+
+    # resize image
+    output = cv2.resize(image, dsize)
+    return output
+
+def cutImage(image):
+    ## (1) Convert to gray, and threshold
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    th, threshed = cv2.threshold(gray, 240, 255, cv2.THRESH_BINARY_INV)
+
+    ## (2) Morph-op to remove noise
+    kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (11,11))
+    morphed = cv2.morphologyEx(threshed, cv2.MORPH_CLOSE, kernel)
+
+    ## (3) Find the max-area contour
+    cnts = cv2.findContours(morphed, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[-2]
+    cnt = sorted(cnts, key=cv2.contourArea)[-1]
+
+    ## (4) Crop and save it
+    x,y,w,h = cv2.boundingRect(cnt)
+    dst = image[y:y+h, x:x+w]
+    return dst
 
 
 #Converting the original image 
-img = get_grayscale(imgOriginal)
+imgProcessed, imgReSized, deltaX, deltaY = match_template(reScaling(cutImage(imgOriginal)),imgTemplate)[:4]
+img = get_grayscale(imgProcessed)
 img = remove_noise(img)
 img = thresholding(img)
 
@@ -88,13 +135,13 @@ def readID():
  
     #Calculating the confidence level, mean of the CI per character
     txtconf = [int(i) for i in txtconf['conf'] if i != '-1' ]
-    print(txtconf)
-    conf = mean(txtconf)
-    print(conf)
-    if conf >= minCI:
-        cv2.rectangle(imgOriginal, (5,105), (215,140), (0, 255, 0), 2)
-    else:
-        cv2.rectangle(imgOriginal, (5,105), (215,140), (0, 0, 255), 2)
+    if len(txtconf) > 0:
+        conf = mean(txtconf)
+        print(conf)
+        if conf >= minCI:
+            cv2.rectangle(imgReSized, (5 + deltaX, 105 + deltaY), (215 + deltaX, 140 + deltaY), (0, 255, 0), 2)
+        else:
+            cv2.rectangle(imgReSized, (5 + deltaX, 105 + deltaY), (215 + deltaX, 140 + deltaY), (0, 0, 255), 2)
     
 def readNames():
     #Reading Names
@@ -102,16 +149,16 @@ def readNames():
     text = pytesseract.image_to_string(roi, config="-l spa")
     print(text.strip().replace("\n", " "))
     txtconf = pytesseract.image_to_data(roi, "spa",output_type=Output.DICT)
- 
+    
     #Calculating the confidence level, mean of the CI per character
     txtconf = [int(i) for i in txtconf['conf'] if i != '-1' ]
-    print(txtconf)
-    conf = mean(txtconf)
-    print(conf)
-    if conf >= minCI:
-        cv2.rectangle(imgOriginal, (235,100), (470,145), (0, 255, 0), 2)
-    else:
-        cv2.rectangle(imgOriginal, (235,100), (470,145), (0, 0, 255), 2)
+    if len(txtconf) > 0:
+        conf = mean(txtconf)
+        print(conf)
+        if conf >= minCI:
+            cv2.rectangle(imgReSized, (235 + deltaX, 100 + deltaY), (470 + deltaX, 145 + deltaY), (0, 255, 0), 2)
+        else:
+            cv2.rectangle(imgReSized, (235 + deltaX, 100 + deltaY), (470 + deltaX, 145 + deltaY), (0, 0, 255), 2)
     
 
 def readFamilyNames():
@@ -123,13 +170,13 @@ def readFamilyNames():
  
     #Calculating the confidence level, mean of the CI per character
     txtconf = [int(i) for i in txtconf['conf'] if i != '-1' ]
-    print(txtconf)
-    conf = mean(txtconf)
-    print(conf)
-    if conf >= minCI:
-        cv2.rectangle(imgOriginal, (235,160), (470,205), (0, 255, 0), 2)
-    else:
-        cv2.rectangle(imgOriginal, (235,160), (470,205), (0, 0, 255), 2)
+    if len(txtconf) > 0:
+        conf = mean(txtconf)
+        print(conf)
+        if conf >= minCI:
+            cv2.rectangle(imgReSized, (235 + deltaX, 160 + deltaY), (470 + deltaX, 205 + deltaY), (0, 255, 0), 2)
+        else:
+            cv2.rectangle(imgReSized, (235 + deltaX, 160 + deltaY), (470 + deltaX, 205 + deltaY), (0, 0, 255), 2)
 
 def readGender():
     #Reading Gender
@@ -140,13 +187,13 @@ def readGender():
  
     #Calculating the confidence level, mean of the CI per character
     txtconf = [int(i) for i in txtconf['conf'] if i != '-1' ]
-    print(txtconf)
-    conf = mean(txtconf)
-    print(conf)
-    if conf >= minCI:
-        cv2.rectangle(imgOriginal, (235,235), (365,265), (0, 255, 0), 2)
-    else:
-        cv2.rectangle(imgOriginal, (235,235), (365,265), (0, 0, 255), 2)
+    if len(txtconf) > 0:
+        conf = mean(txtconf)
+        print(conf)
+        if conf >= minCI:
+            cv2.rectangle(imgReSized, (235 + deltaX, 235 + deltaY), (365 + deltaX, 265 + deltaY), (0, 255, 0), 2)
+        else:
+            cv2.rectangle(imgReSized, (235 + deltaX, 235 + deltaY), (365 + deltaX, 265 + deltaY), (0, 0, 255), 2)
 
 def readNationality():
     #Reading Nationality
@@ -157,13 +204,13 @@ def readNationality():
 
     #Calculating the confidence level, mean of the CI per character
     txtconf = [int(i) for i in txtconf['conf'] if i != '-1' ]
-    print(txtconf)
-    conf = mean(txtconf)
-    print(conf)
-    if conf >= minCI:
-        cv2.rectangle(imgOriginal, (235,280), (470,305), (0, 255, 0), 2)
-    else:
-        cv2.rectangle(imgOriginal, (235,280), (470,305), (0, 0, 255), 2)
+    if len(txtconf) > 0:
+        conf = mean(txtconf)
+        print(conf)
+        if conf >= minCI:
+            cv2.rectangle(imgReSized, (235 + deltaX, 280 + deltaY), (470 + deltaX, 305 + deltaY), (0, 255, 0), 2)
+        else:
+            cv2.rectangle(imgReSized, (235 + deltaX, 280 + deltaY), (470 + deltaX, 305 + deltaY), (0, 0, 255), 2)
     
 def readDOB():
     #Reading Date of Birth
@@ -174,14 +221,17 @@ def readDOB():
 
     #Calculating the confidence level, mean of the CI per character
     txtconf = [int(i) for i in txtconf['conf'] if i != '-1' ]
-    print(txtconf)
-    conf = mean(txtconf)
-    print(conf)
-    if conf >= minCI:
-        cv2.rectangle(imgOriginal, (235,325), (360,350), (0, 255, 0), 2)
-    else:
-       cv2.rectangle(imgOriginal, (235,325), (360,350), (0, 0, 255), 2)
-    
+    if len(txtconf) > 0:
+        conf = mean(txtconf)
+        print(conf)
+        if conf >= minCI:
+            cv2.rectangle(imgReSized, (235 + deltaX, 325 + deltaY), (360 + deltaX, 350 + deltaY), (0, 255, 0), 2)
+        else:
+            cv2.rectangle(imgReSized, (235 + deltaX, 325 + deltaY), (360 + deltaX, 350 + deltaY), (0, 0, 255), 2)
+
+
+
+   
 
 readID()
 readNames()
@@ -189,6 +239,6 @@ readFamilyNames()
 readGender()
 readNationality()
 readDOB()
-cv2.imwrite(((os.path.dirname(os.path.realpath(__file__))+"\\results\\image"+str(datetime.datetime.now().timestamp())+".jpg")), img)
-cv2.imshow('img', imgOriginal)
+#cv2.imwrite(((os.path.dirname(os.path.realpath(__file__))+"\\results\\image"+str(datetime.datetime.now().timestamp())+".jpg")), img)
+cv2.imshow('img', imgReSized)
 cv2.waitKey(0)
