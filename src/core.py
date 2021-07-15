@@ -8,13 +8,13 @@ import csv
 from statistics import mean
 
 #Reading the image from path
-imgOriginal = cv2.imread(((os.path.dirname(os.path.realpath(__file__))+"\\images\\image4.jpg")))
+#imgOriginal = cv2.imread(((os.path.dirname(os.path.realpath(__file__))+"\\images\\image2.jpg")))
 imgTemplate = cv2.imread(((os.path.dirname(os.path.realpath(__file__))+"\\images\\template.jpg")))
 results = []
 minCI = 90
 deltaX = 0
 deltaY = 0
-
+img, imgProcessed, imgReSized, imgOriginal = None
 
 # get grayscale image
 def get_grayscale(image):
@@ -110,11 +110,14 @@ def cutImage(image):
     return dst
 
 
-#Converting the original image 
-imgProcessed, imgReSized, deltaX, deltaY = match_template(reScaling(cutImage(imgOriginal)),imgTemplate)[:4]
-img = get_grayscale(imgProcessed)
-img = remove_noise(img)
-img = thresholding(img)
+#Opening and converting the original image 
+def openImage(path):
+    imgOriginal = cv2.imread(path)
+    imgProcessed, imgReSized, deltaX, deltaY = match_template(reScaling(cutImage(imgOriginal)),imgTemplate)[:4]
+    img = get_grayscale(imgProcessed)
+    img = remove_noise(img)
+    img = thresholding(img)
+    return imgReSized
 
 
 
@@ -238,16 +241,16 @@ def readDOB():
 
 
 
-   
+def getData(): 
+    readID()
+    readNames()
+    readFamilyNames()
+    readGender()
+    readNationality()
+    readDOB()
+    return results
 
-readID()
-readNames()
-readFamilyNames()
-readGender()
-readNationality()
-readDOB()
-
-writeResults()
+#writeResults()
 #cv2.imwrite(((os.path.dirname(os.path.realpath(__file__))+"\\results\\image"+str(datetime.datetime.now().timestamp())+".jpg")), img)
-cv2.imshow('img', imgReSized)
-cv2.waitKey(0)
+#cv2.imshow('img', imgReSized)
+#cv2.waitKey(0)
