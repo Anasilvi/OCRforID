@@ -6,15 +6,16 @@ import datetime
 from pytesseract import Output
 import csv
 from statistics import mean
+from time import sleep
 
 #Reading the image from path
 #imgOriginal = cv2.imread(((os.path.dirname(os.path.realpath(__file__))+"\\images\\image2.jpg")))
 imgTemplate = cv2.imread(((os.path.dirname(os.path.realpath(__file__))+"\\images\\template.jpg")))
 results = []
 minCI = 90
-deltaX = 0
-deltaY = 0
-img, imgProcessed, imgReSized, imgOriginal = None
+
+
+processFinish = False
 
 # get grayscale image
 def get_grayscale(image):
@@ -27,7 +28,7 @@ def remove_noise(image):
 #thresholding
 def thresholding(image):
     #return cv2.threshold(image, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
-    return cv2.adaptiveThreshold(img,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,\
+    return cv2.adaptiveThreshold(image,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,\
             cv2.THRESH_BINARY,11,10)
 
 #dilation
@@ -111,15 +112,20 @@ def cutImage(image):
 
 
 #Opening and converting the original image 
-def openImage(path):
+def processImage(path):
     imgOriginal = cv2.imread(path)
     imgProcessed, imgReSized, deltaX, deltaY = match_template(reScaling(cutImage(imgOriginal)),imgTemplate)[:4]
     img = get_grayscale(imgProcessed)
     img = remove_noise(img)
     img = thresholding(img)
-    return imgReSized
+    processFinish, newImg = getData(img, imgReSized, deltaX, deltaY)[:2]
 
-
+    if processFinish:
+        print('Saved image', cv2.imwrite(((os.path.dirname(os.path.realpath(__file__))+"\\tmp\\imageTmp.jpg")), newImg))
+        return processFinish, (os.path.dirname(os.path.realpath(__file__))+"\\tmp\\imageTmp.jpg"), results
+    else:
+        return processFinish, 'Error processing the image.', results
+     
 
     
 def writeResults():
@@ -129,7 +135,7 @@ def writeResults():
         for x in range(len(results)):
             csv_writer.writerow([results[x][0], results[x][1], results[x][2]])
     
-def readID():
+def readID(img, imgReSized, deltaX, deltaY):
     #Reading ID
     roi = img[105:145,5:215]
     text = pytesseract.image_to_string(roi, lang='spa', config='digits')
@@ -138,16 +144,20 @@ def readID():
     #Calculating the confidence level, mean of the CI per character
     txtconf = [int(i) for i in txtconf['conf'] if i != '-1' ]
     conf = 0
-    if len(txtconf) > 0:
+    if len(txtconf) > 0 and len(text.strip()) > 0:
         conf = mean(txtconf)
         #Drawing red rectangle for low confidence or green rectangle for higher confidence
         if conf >= minCI:
-            cv2.rectangle(imgReSized, (5 + deltaX, 105 + deltaY), (215 + deltaX, 145 + deltaY), (0, 255, 0), 2)
+            imgP = cv2.rectangle(imgReSized, (5 + deltaX, 105 + deltaY), (215 + deltaX, 145 + deltaY), (0, 255, 0), 2)
         else:
-            cv2.rectangle(imgReSized, (5 + deltaX, 105 + deltaY), (215 + deltaX, 145 + deltaY), (0, 0, 255), 2)
+            imgP = cv2.rectangle(imgReSized, (5 + deltaX, 105 + deltaY), (215 + deltaX, 145 + deltaY), (0, 0, 255), 2)
+    else:
+        imgP = imgReSized
+        conf = 0
     results.append(['ID', text.strip(), conf])
+    return imgP
     
-def readNames():
+def readNames(img, imgReSized, deltaX, deltaY):
     #Reading Names
     roi = img[100:145,235:470]
     text = pytesseract.image_to_string(roi, config="-l spa")
@@ -156,17 +166,21 @@ def readNames():
     conf = 0
     #Calculating the confidence level, mean of the CI per character
     txtconf = [int(i) for i in txtconf['conf'] if i != '-1' ]
-    if len(txtconf) > 0:
+    if len(txtconf) > 0 and len(text.strip()) > 0:
         conf = mean(txtconf)
         #Drawing red rectangle for low confidence or green rectangle for higher confidence
         if conf >= minCI:
-            cv2.rectangle(imgReSized, (235 + deltaX, 100 + deltaY), (470 + deltaX, 145 + deltaY), (0, 255, 0), 2)
+            imgP = cv2.rectangle(imgReSized, (235 + deltaX, 100 + deltaY), (470 + deltaX, 145 + deltaY), (0, 255, 0), 2)
         else:
-            cv2.rectangle(imgReSized, (235 + deltaX, 100 + deltaY), (470 + deltaX, 145 + deltaY), (0, 0, 255), 2)
+            imgP = cv2.rectangle(imgReSized, (235 + deltaX, 100 + deltaY), (470 + deltaX, 145 + deltaY), (0, 0, 255), 2)
+    else:
+        imgP = imgReSized
+        conf = 0
     results.append(['Names', text.strip(), conf])
+    return imgP
     
 
-def readFamilyNames():
+def readFamilyNames(img, imgReSized, deltaX, deltaY):
     #Reading Family Names
     roi = img[160:205,235:470]
     text = pytesseract.image_to_string(roi, config="-l spa")
@@ -175,17 +189,21 @@ def readFamilyNames():
     conf = 0
     #Calculating the confidence level, mean of the CI per character
     txtconf = [int(i) for i in txtconf['conf'] if i != '-1' ]
-    if len(txtconf) > 0:
+    if len(txtconf) > 0 and len(text.strip()) > 0:
         conf = mean(txtconf)
         #Drawing red rectangle for low confidence or green rectangle for higher confidence
         if conf >= minCI:
-            cv2.rectangle(imgReSized, (235 + deltaX, 160 + deltaY), (470 + deltaX, 205 + deltaY), (0, 255, 0), 2)
+            imgP = cv2.rectangle(imgReSized, (235 + deltaX, 160 + deltaY), (470 + deltaX, 205 + deltaY), (0, 255, 0), 2)
         else:
-            cv2.rectangle(imgReSized, (235 + deltaX, 160 + deltaY), (470 + deltaX, 205 + deltaY), (0, 0, 255), 2)
+            imgP = cv2.rectangle(imgReSized, (235 + deltaX, 160 + deltaY), (470 + deltaX, 205 + deltaY), (0, 0, 255), 2)
+    else:
+        imgP = imgReSized
+        conf = 0
     results.append(['FamilyNames', text.strip(), conf])
+    return imgP
 
 
-def readGender():
+def readGender(img, imgReSized, deltaX, deltaY):
     #Reading Gender
     roi = img[235:265,235:365]
     text = pytesseract.image_to_string(roi, config="-l spa")
@@ -194,16 +212,20 @@ def readGender():
     conf = 0
     #Calculating the confidence level, mean of the CI per character
     txtconf = [int(i) for i in txtconf['conf'] if i != '-1' ]
-    if len(txtconf) > 0:
+    if len(txtconf) > 0 and len(text.strip()) > 0:
         conf = mean(txtconf)
         #Drawing red rectangle for low confidence or green rectangle for higher confidence
         if conf >= minCI:
-            cv2.rectangle(imgReSized, (235 + deltaX, 235 + deltaY), (365 + deltaX, 265 + deltaY), (0, 255, 0), 2)
+            imgP = cv2.rectangle(imgReSized, (235 + deltaX, 235 + deltaY), (365 + deltaX, 265 + deltaY), (0, 255, 0), 2)
         else:
-            cv2.rectangle(imgReSized, (235 + deltaX, 235 + deltaY), (365 + deltaX, 265 + deltaY), (0, 0, 255), 2)
+            imgP = cv2.rectangle(imgReSized, (235 + deltaX, 235 + deltaY), (365 + deltaX, 265 + deltaY), (0, 0, 255), 2)
+    else:
+        imgP = imgReSized
+        conf = 0
     results.append(['Gender', text.strip(), conf])
+    return imgP
 
-def readNationality():
+def readNationality(img, imgReSized, deltaX, deltaY):
     #Reading Nationality
     roi = img[280:310,235:470]
     text = pytesseract.image_to_string(roi, config="-l spa")
@@ -212,16 +234,20 @@ def readNationality():
     conf = 0
     #Calculating the confidence level, mean of the CI per character
     txtconf = [int(i) for i in txtconf['conf'] if i != '-1' ]
-    if len(txtconf) > 0:
+    if len(txtconf) > 0 and len(text.strip()) > 0:
         conf = mean(txtconf)
         #Drawing red rectangle for low confidence or green rectangle for higher confidence
         if conf >= minCI:
-            cv2.rectangle(imgReSized, (235 + deltaX, 280 + deltaY), (470 + deltaX, 310 + deltaY), (0, 255, 0), 2)
+            imgP = cv2.rectangle(imgReSized, (235 + deltaX, 280 + deltaY), (470 + deltaX, 310 + deltaY), (0, 255, 0), 2)
         else:
-            cv2.rectangle(imgReSized, (235 + deltaX, 280 + deltaY), (470 + deltaX, 310 + deltaY), (0, 0, 255), 2)
+            imgP = cv2.rectangle(imgReSized, (235 + deltaX, 280 + deltaY), (470 + deltaX, 310 + deltaY), (0, 0, 255), 2)
+    else:
+        imgP = imgReSized
+        conf = 0
     results.append(['Nationality', text.strip(), conf])
+    return imgP
     
-def readDOB():
+def readDOB(img, imgReSized, deltaX, deltaY):
     #Reading Date of Birth
     roi = img[325:360,235:360]
     text = pytesseract.image_to_string(roi, config="-l spa")
@@ -230,25 +256,34 @@ def readDOB():
     conf = 0
     #Calculating the confidence level, mean of the CI per character
     txtconf = [int(i) for i in txtconf['conf'] if i != '-1' ]
-    if len(txtconf) > 0:
+    if len(txtconf) > 0 and len(text.strip()) > 0:
         conf = mean(txtconf)
         #Drawing red rectangle for low confidence or green rectangle for higher confidence
         if conf >= minCI:
-            cv2.rectangle(imgReSized, (235 + deltaX, 325 + deltaY), (360 + deltaX, 360 + deltaY), (0, 255, 0), 2)
+            imgP = cv2.rectangle(imgReSized, (235 + deltaX, 325 + deltaY), (360 + deltaX, 360 + deltaY), (0, 255, 0), 2)
         else:
-            cv2.rectangle(imgReSized, (235 + deltaX, 325 + deltaY), (360 + deltaX, 360 + deltaY), (0, 0, 255), 2)
+            imgP = cv2.rectangle(imgReSized, (235 + deltaX, 325 + deltaY), (360 + deltaX, 360 + deltaY), (0, 0, 255), 2)
+    else:
+        imgP = imgReSized
+        conf = 0
     results.append(['DOB', text.strip(), conf])
+    return imgP
+    
+    
 
 
-
-def getData(): 
-    readID()
-    readNames()
-    readFamilyNames()
-    readGender()
-    readNationality()
-    readDOB()
-    return results
+def getData(img, imgReSized, deltaX, deltaY): 
+    imgReSized = readID(img, imgReSized, deltaX, deltaY)
+    imgReSized = readNames(img, imgReSized, deltaX, deltaY)
+    imgReSized = readFamilyNames(img, imgReSized, deltaX, deltaY)
+    imgReSized = readGender(img, imgReSized, deltaX, deltaY)
+    imgReSized = readNationality(img, imgReSized, deltaX, deltaY)
+    imgReSized = readDOB(img, imgReSized, deltaX, deltaY)
+    processFinish = True
+    return processFinish, imgReSized
+    
+    
+    
 
 #writeResults()
 #cv2.imwrite(((os.path.dirname(os.path.realpath(__file__))+"\\results\\image"+str(datetime.datetime.now().timestamp())+".jpg")), img)

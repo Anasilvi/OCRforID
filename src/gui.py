@@ -8,8 +8,14 @@
 
 from PyQt6 import QtCore, QtGui, QtWidgets
 import os
+import core
+import numpy as np
+from time import sleep
+from PIL import Image, ImageQt
 
 class Ui_MainWindow(object):
+
+    pathImage = ''
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1000, 613)
@@ -37,6 +43,7 @@ class Ui_MainWindow(object):
         self.pushButton = QtWidgets.QPushButton(self.groupBox)
         self.pushButton.setGeometry(QtCore.QRect(350, 512, 131, 31))
         self.pushButton.setObjectName("pushButton")
+        self.pushButton.clicked.connect(self.processImage)
         self.groupBox_2 = QtWidgets.QGroupBox(self.frame_2)
         self.groupBox_2.setGeometry(QtCore.QRect(490, 30, 490, 551))
         font = QtGui.QFont()
@@ -248,18 +255,70 @@ class Ui_MainWindow(object):
 
     #Function to open a file
     def getfile(self):
-        fDialog = QtWidgets.QFileDialog()
-        file_filter = 'Image File (*.jpg *.jpeg *.png)'
-        fname = fDialog.getOpenFileName(caption='Select a data file',
-            filter=file_filter,)
-        self.frame_3.setVisible(False)
-        self.img_label = QtWidgets.QLabel(self.frame)
-        pixmap = QtGui.QPixmap(fname[0])
-        pixmap = pixmap.scaled(480, 480, QtCore.Qt.AspectRatioMode.KeepAspectRatio)
-        self.img_label.setPixmap(pixmap)
-        self.img_label.setScaledContents(True)
-        self.img_label.resize(pixmap.width(),pixmap.height())
-        self.frame_2.setVisible(True)
+        try:
+            fDialog = QtWidgets.QFileDialog()
+            file_filter = 'Image File (*.jpg *.jpeg *.png)'
+            fname = fDialog.getOpenFileName(caption='Select a data file',
+                filter=file_filter,)
+            self.frame_3.setVisible(False)
+            self.img_label = QtWidgets.QLabel(self.frame)
+            self.pathImage = fname[0]
+            pixmap = QtGui.QPixmap(fname[0])
+
+            if pixmap.isNull():
+                self.img_label.setText('Image too large to preview. Please proceed to process the image.')
+                
+            else:
+                pixmap = pixmap.scaled(480, 480, QtCore.Qt.AspectRatioMode.KeepAspectRatio)
+                self.img_label.setPixmap(pixmap)
+                self.img_label.setScaledContents(True)
+                self.img_label.resize(pixmap.width(),pixmap.height())
+            self.frame_2.setVisible(True)
+        except Exception as e:
+            print('Error ',e)
+    
+    #Function to process the image
+    def processImage(self):
+        print(self.pathImage)
+        #Initialze QtGui.QImage() with arguments data, height, width, and QImage.Format
+        imgResults = core.processImage(self.pathImage)
+        
+        #Review if the process finished
+        if imgResults[0]:
+            pixmap = QtGui.QPixmap(imgResults[1])
+            pixmap = pixmap.scaled(480, 480, QtCore.Qt.AspectRatioMode.KeepAspectRatio)
+            self.img_label.setPixmap(pixmap)
+            self.img_label.setScaledContents(True)
+            self.img_label.resize(pixmap.width(),pixmap.height())
+
+            self.lineEdit.setText(imgResults[2][0][1])
+            if imgResults[2][0][2] < core.minCI:
+                self.lineEdit.setStyleSheet("color: red;")
+
+            self.lineEdit_2.setText(imgResults[2][1][1])
+            if imgResults[2][1][2] < core.minCI:
+                self.lineEdit_2.setStyleSheet("color: red;")
+
+            self.lineEdit_3.setText(imgResults[2][2][1])
+            if imgResults[2][2][2] < core.minCI:
+                self.lineEdit_3.setStyleSheet("color: red;")
+
+            self.lineEdit_4.setText(imgResults[2][3][1])
+            if imgResults[2][3][2] < core.minCI:
+                self.lineEdit_4.setStyleSheet("color: red;")
+
+            self.lineEdit_5.setText(imgResults[2][4][1])
+            if imgResults[2][4][2] < core.minCI:
+                self.lineEdit_5.setStyleSheet("color: red;")
+
+            self.lineEdit_6.setText(imgResults[2][5][1])
+            if imgResults[2][5][2] < core.minCI:
+                self.lineEdit_6.setStyleSheet("color: red;")
+
+            self.frame_2.setVisible(True)
+            print('Process finished ', imgResults[0])
+        else:
+            print(imgResults[1])
 
 if __name__ == "__main__":
     import sys
