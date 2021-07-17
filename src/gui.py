@@ -18,7 +18,7 @@ class Ui_MainWindow(object):
     pathImage = ''
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1000, 613)
+        MainWindow.resize(1010, 618)
         MainWindow.setMinimumSize(QtCore.QSize(1000, 600))
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
@@ -30,22 +30,23 @@ class Ui_MainWindow(object):
         self.frame_2.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
         self.frame_2.setObjectName("frame_2")
         self.groupBox = QtWidgets.QGroupBox(self.frame_2)
-        self.groupBox.setGeometry(QtCore.QRect(0, 30, 490, 551))
+        self.groupBox.setGeometry(QtCore.QRect(10, 35, 490, 550))
         font = QtGui.QFont()
         font.setPointSize(12)
         self.groupBox.setFont(font)
         self.groupBox.setObjectName("groupBox")
         self.frame = QtWidgets.QFrame(self.groupBox)
-        self.frame.setGeometry(QtCore.QRect(10, 20, 471, 481))
+        self.frame.setGeometry(QtCore.QRect(2, 30, 486, 500))
         self.frame.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
         self.frame.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
         self.frame.setObjectName("frame")
+        self.img_label = QtWidgets.QLabel(self.frame)
         self.pushButton = QtWidgets.QPushButton(self.groupBox)
         self.pushButton.setGeometry(QtCore.QRect(350, 512, 131, 31))
         self.pushButton.setObjectName("pushButton")
         self.pushButton.clicked.connect(self.processImage)
         self.groupBox_2 = QtWidgets.QGroupBox(self.frame_2)
-        self.groupBox_2.setGeometry(QtCore.QRect(490, 30, 490, 551))
+        self.groupBox_2.setGeometry(QtCore.QRect(500, 35, 490, 550))
         font = QtGui.QFont()
         font.setPointSize(12)
         self.groupBox_2.setFont(font)
@@ -143,12 +144,13 @@ class Ui_MainWindow(object):
 
         #Creating home page
         self.frame_3 = QtWidgets.QFrame(self.centralwidget)
-        self.frame_3.setGeometry(QtCore.QRect(40, 60, 901, 431))
+        self.frame_3.setGeometry(QtCore.QRect(0, 0, 1010, 600))
         self.frame_3.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
         self.frame_3.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
         self.frame_3.setObjectName("frame_3")
+       
         self.pushButton_3 = QtWidgets.QPushButton(self.frame_3)
-        self.pushButton_3.setGeometry(QtCore.QRect(70, 160, 180, 180))
+        self.pushButton_3.setGeometry(QtCore.QRect(118, 280, 180, 180))
         font = QtGui.QFont()
         font.setKerning(True)
         self.pushButton_3.setFont(font)
@@ -158,21 +160,22 @@ class Ui_MainWindow(object):
         self.pushButton_3.setIcon(icon)
         self.pushButton_3.setIconSize(QtCore.QSize(150, 150))
         self.pushButton_3.setObjectName("pushButton_3")
-        self.pushButton_3.clicked.connect(self.getfile)
-
+        self.pushButton_3.clicked.connect(self.showMainPage)
+        self.pushButton_3.setStyleSheet("QPushButton{background-color : transparent;} QPushButton::hover" "{" "background-color : rgb(229, 241, 251);""}")
         self.pushButton_4 = QtWidgets.QPushButton(self.frame_3)
-        self.pushButton_4.setGeometry(QtCore.QRect(360, 160, 180, 180))
+        self.pushButton_4.setGeometry(QtCore.QRect(415, 280, 180, 180))
         font = QtGui.QFont()
         font.setKerning(True)
         self.pushButton_4.setFont(font)
         self.pushButton_4.setText("")
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap(((os.path.dirname(os.path.realpath(__file__))+"\\resources\\SearchIcon.png"))), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
+        icon1.addPixmap(QtGui.QPixmap(((os.path.dirname(os.path.realpath(__file__))+"\\resources\\searchIcon.png"))), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         self.pushButton_4.setIcon(icon1)
         self.pushButton_4.setIconSize(QtCore.QSize(150, 150))
         self.pushButton_4.setObjectName("pushButton_4")
+        self.pushButton_4.setStyleSheet("QPushButton{background-color : transparent;} QPushButton::hover" "{" "background-color : rgb(229, 241, 251);""}")
         self.pushButton_5 = QtWidgets.QPushButton(self.frame_3)
-        self.pushButton_5.setGeometry(QtCore.QRect(680, 160, 180, 180))
+        self.pushButton_5.setGeometry(QtCore.QRect(712, 280, 180, 180))
         font = QtGui.QFont()
         font.setKerning(True)
         self.pushButton_5.setFont(font)
@@ -182,37 +185,61 @@ class Ui_MainWindow(object):
         self.pushButton_5.setIcon(icon2)
         self.pushButton_5.setIconSize(QtCore.QSize(150, 150))
         self.pushButton_5.setObjectName("pushButton_5")
-        #Labels
-        self.labelH = QtWidgets.QLabel(self.frame_3)
-        self.labelH.setGeometry(QtCore.QRect(6, -1, 891, 121))
-        font = QtGui.QFont()
-        font.setPointSize(40)
-        self.labelH.setFont(font)
-        self.labelH.setFrameShadow(QtWidgets.QFrame.Shadow.Plain)
-        self.labelH.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-        self.labelH.setObjectName("labelH")
-        self.labelH_2 = QtWidgets.QLabel(self.frame_3)
-        self.labelH_2.setGeometry(QtCore.QRect(70, 360, 171, 20))
-        font = QtGui.QFont()
-        font.setPointSize(12)
-        self.labelH_2.setFont(font)
-        self.labelH_2.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-        self.labelH_2.setObjectName("labelH_2")
-        self.labelH_3 = QtWidgets.QLabel(self.frame_3)
-        self.labelH_3.setGeometry(QtCore.QRect(360, 360, 171, 20))
-        font = QtGui.QFont()
-        font.setPointSize(12)
-        self.labelH_3.setFont(font)
-        self.labelH_3.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-        self.labelH_3.setObjectName("labelH_3")
-        self.labelH_4 = QtWidgets.QLabel(self.frame_3)
-        self.labelH_4.setGeometry(QtCore.QRect(680, 360, 171, 20))
-        font = QtGui.QFont()
-        font.setPointSize(12)
-        self.labelH_4.setFont(font)
-        self.labelH_4.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-        self.labelH_4.setObjectName("labelH_4")
+        self.pushButton_5.setStyleSheet("QPushButton{background-color : transparent;} QPushButton::hover" "{" "background-color : rgb(229, 241, 251);""}")
+        #Adding background
+        self.label_Background = QtWidgets.QLabel(self.frame_3)
+        self.label_Background.setGeometry(QtCore.QRect(0, 0, 1010, 600))
+        self.label_Background.setText("")
+        self.label_Background.setPixmap(QtGui.QPixmap((os.path.dirname(os.path.realpath(__file__))+"\\resources\\homePage.png")))
+        self.label_Background.setObjectName("label_Background")
+        self.pushButton_3.raise_()
+        self.pushButton_4.raise_()
+        self.pushButton_5.raise_()
+        #Creating top bar
+        self.pushButton_New = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_New.setGeometry(QtCore.QRect(50, 0, 40, 40))
+        self.pushButton_New.setText("")
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap((os.path.dirname(os.path.realpath(__file__))+"\\resources\\newIcon.png")), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
+        self.pushButton_New.setIcon(icon)
+        self.pushButton_New.setIconSize(QtCore.QSize(40, 40))
+        self.pushButton_New.setObjectName("pushButton_New")
+        self.pushButton_New.setVisible(False)
+        self.pushButton_New.clicked.connect(self.newImage)
+        self.pushButton_New.setStyleSheet("QPushButton{background-color : transparent;} QPushButton::hover" "{" "background-color : rgb(229, 241, 251);""}")
+        self.pushButton_Home = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_Home.setGeometry(QtCore.QRect(0, 0, 40, 40))
+        self.pushButton_Home.setText("")
+        self.pushButton_Home.clicked.connect(self.showHomePage)
+        icon1 = QtGui.QIcon()
+        icon1.addPixmap(QtGui.QPixmap((os.path.dirname(os.path.realpath(__file__))+"\\resources\\homeIcon.png")), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
+        self.pushButton_Home.setIcon(icon1)
+        self.pushButton_Home.setIconSize(QtCore.QSize(35, 35))
+        self.pushButton_Home.setObjectName("pushButton_Home")
+        self.pushButton_Home.setVisible(False)
+        self.pushButton_Home.setStyleSheet("QPushButton{background-color : transparent;} QPushButton::hover" "{" "background-color : rgb(229, 241, 251);""}")
+        self.pushButton_Help2 = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_Help2.setGeometry(QtCore.QRect(970, 0, 40, 40))
+        self.pushButton_Help2.setText("")
+        icon2 = QtGui.QIcon()
+        icon2.addPixmap(QtGui.QPixmap((os.path.dirname(os.path.realpath(__file__))+"\\resources\\infoIcon.png")), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
+        self.pushButton_Help2.setIcon(icon2)
+        self.pushButton_Help2.setIconSize(QtCore.QSize(40, 40))
+        self.pushButton_Help2.setObjectName("pushButton_Help2")
+        self.pushButton_Help2.setVisible(False)
+        self.pushButton_Help2.setStyleSheet("QPushButton{background-color : transparent;} QPushButton::hover" "{" "background-color : rgb(229, 241, 251);""}")
+        self.pushButton_Settings = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_Settings.setGeometry(QtCore.QRect(920, 0, 40, 40))
+        self.pushButton_Settings.setText("")
+        icon2 = QtGui.QIcon()
+        icon2.addPixmap(QtGui.QPixmap((os.path.dirname(os.path.realpath(__file__))+"\\resources\\settingsIcon.png")), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
+        self.pushButton_Settings.setIcon(icon2)
+        self.pushButton_Settings.setIconSize(QtCore.QSize(40, 40))
+        self.pushButton_Settings.setObjectName("pushButton_Settings")
+        self.pushButton_Settings.setVisible(False)
+        self.pushButton_Settings.setStyleSheet("QPushButton{background-color : transparent;} QPushButton::hover" "{" "background-color : rgb(229, 241, 251);""}")
 
+        
 
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
@@ -244,36 +271,45 @@ class Ui_MainWindow(object):
         self.actionOpen_File.setText(_translate("MainWindow", "Open image"))
         self.actionSearch_info.setText(_translate("MainWindow", "Search info"))
         self.actionAbout.setText(_translate("MainWindow", "About"))
-        self.labelH.setText(_translate("MainWindow", "ID Reader"))
-        self.labelH_2.setText(_translate("MainWindow", "Process an image"))
-        self.labelH_3.setText(_translate("MainWindow", "Search person"))
-        self.labelH_4.setText(_translate("MainWindow", "Help"))
         self.actionOpen_File.setText(_translate("MainWindow", "Open image"))
         self.actionSearch_info.setText(_translate("MainWindow", "Search info"))
         self.actionAbout.setText(_translate("MainWindow", "About"))
 
+
+    #Function to show the main page
+    def showMainPage(self):
+        self.frame_3.setVisible(False)
+        self.frame_2.setVisible(True)
+        self.frame.setVisible(True)
+        self.img_label.setVisible(True)
+        self.pushButton_Help2.setVisible(True)
+        self.pushButton_Home.setVisible(True)
+        self.pushButton_New.setVisible(True)
+        self.pushButton_Settings.setVisible(True)
 
     #Function to open a file
     def getfile(self):
         try:
             fDialog = QtWidgets.QFileDialog()
             file_filter = 'Image File (*.jpg *.jpeg *.png)'
-            fname = fDialog.getOpenFileName(caption='Select a data file',
-                filter=file_filter,)
-            self.frame_3.setVisible(False)
-            self.img_label = QtWidgets.QLabel(self.frame)
-            self.pathImage = fname[0]
-            pixmap = QtGui.QPixmap(fname[0])
-
-            if pixmap.isNull():
-                self.img_label.setText('Image too large to preview. Please proceed to process the image.')
+            fname = fDialog.getOpenFileName(caption='Select a data file', filter=file_filter,)
+            if fname[0] != "":
+                self.frame_3.setVisible(False)
                 
-            else:
-                pixmap = pixmap.scaled(480, 480, QtCore.Qt.AspectRatioMode.KeepAspectRatio)
-                self.img_label.setPixmap(pixmap)
-                self.img_label.setScaledContents(True)
-                self.img_label.resize(pixmap.width(),pixmap.height())
-            self.frame_2.setVisible(True)
+                self.pathImage = fname[0]
+                pixmap = QtGui.QPixmap(self.pathImage)
+
+                if pixmap.isNull():
+                    self.img_label.clear()
+                    self.img_label.setText('Image too large to preview. Please proceed to process the image.')
+                    
+                else:
+                    self.img_label.clear()
+                    pixmap = pixmap.scaled(480, 480, QtCore.Qt.AspectRatioMode.KeepAspectRatio)
+                    self.img_label.setPixmap(pixmap)
+                    self.img_label.setScaledContents(True)
+                    self.img_label.resize(pixmap.width(),pixmap.height())
+                self.showMainPage()
         except Exception as e:
             print('Error ',e)
     
@@ -319,6 +355,46 @@ class Ui_MainWindow(object):
             print('Process finished ', imgResults[0])
         else:
             print(imgResults[1])
+        
+    #Function to get back home page
+    def showHomePage(self):
+        self.frame_3.setVisible(True)
+        self.frame_2.setVisible(False)
+        self.pushButton_Help2.setVisible(False)
+        self.pushButton_Home.setVisible(False)
+        self.pushButton_New.setVisible(False)
+        self.pathImage = ''
+        self.img_label.clear()
+        self.lineEdit.clear()
+        self.lineEdit_2.clear()
+        self.lineEdit_3.clear()
+        self.lineEdit_4.clear()
+        self.lineEdit_5.clear()
+        self.lineEdit_6.clear()
+        core.results = []
+        core.processFinish = False
+
+    #Function to open a new image
+    def newImage(self):
+        if self.pathImage != '':
+            qm = QtWidgets.QMessageBox
+            ans = qm.question(self.centralwidget,"Warning", "When open a new image data not saved will be lost. Are you sure to continue?", qm.StandardButton.Yes | qm.StandardButton.No, qm.StandardButton.No)
+
+            if ans == qm.StandardButton.Yes:
+                self.pathImage = ''
+                self.img_label.clear()
+                self.lineEdit.clear()
+                self.lineEdit_2.clear()
+                self.lineEdit_3.clear()
+                self.lineEdit_4.clear()
+                self.lineEdit_5.clear()
+                self.lineEdit_6.clear()
+                core.results = []
+                core.processFinish = False
+                self.getfile()
+        else:
+            self.getfile()
+        
 
 if __name__ == "__main__":
     import sys
