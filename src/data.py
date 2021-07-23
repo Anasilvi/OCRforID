@@ -55,3 +55,15 @@ def getAllUsers():
         data = con.execute("SELECT * FROM USER")
         for row in data:
             print(row)
+
+#Query to get the table
+def searchUsers(filter, value):
+    if filter == 'id':
+        with con:
+            data = con.execute("SELECT * FROM USER WHERE id = " + value)
+            return data
+    else:
+        with con:
+            data = con.execute("SELECT * FROM USER WHERE " + filter + " like '" + value.upper() + "'") 
+            return data
+

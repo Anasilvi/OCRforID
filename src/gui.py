@@ -17,6 +17,10 @@ from PIL import Image, ImageQt
 
 class Ui_MainWindow(object):
 
+    cursorArray = []
+    position = 0
+    totalResults = 0
+
     pathImage = ''
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -262,6 +266,7 @@ class Ui_MainWindow(object):
         self.pushButton_search = QtWidgets.QPushButton(self.groupBox_search)
         self.pushButton_search.setGeometry(QtCore.QRect(350, 70, 131, 31))
         self.pushButton_search.setObjectName("pushButton_search")
+        self.pushButton_search.clicked.connect(self.searchUser)
         self.formLayoutWidget = QtWidgets.QWidget(self.groupBox_search)
         self.formLayoutWidget.setGeometry(QtCore.QRect(10, 200, 471, 316))
         self.formLayoutWidget.setObjectName("formLayoutWidget")
@@ -369,6 +374,8 @@ class Ui_MainWindow(object):
         self.pushButton_next = QtWidgets.QPushButton(self.groupBox_search)
         self.pushButton_next.setGeometry(QtCore.QRect(350, 520, 131, 31))
         self.pushButton_next.setObjectName("pushButton_next")
+        self.pushButton_next.setDisabled(True)
+        self.pushButton_next.clicked.connect(self.nextResult)
         self.label_results = QtWidgets.QLabel(self.groupBox_search)
         self.label_results.setGeometry(QtCore.QRect(10, 160, 451, 20))
         font = QtGui.QFont()
@@ -388,6 +395,8 @@ class Ui_MainWindow(object):
         self.pushButton_previous = QtWidgets.QPushButton(self.groupBox_search)
         self.pushButton_previous.setGeometry(QtCore.QRect(10, 520, 131, 31))
         self.pushButton_previous.setObjectName("pushButton_previous")
+        self.pushButton_previous.setDisabled(True)
+        self.pushButton_previous.clicked.connect(self.prevResult)
         self.groupBox_image = QtWidgets.QGroupBox(self.frame_search)
         self.groupBox_image.setGeometry(QtCore.QRect(490, 0, 490, 551))
         font = QtGui.QFont()
@@ -400,6 +409,7 @@ class Ui_MainWindow(object):
         self.frame_search1.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
         self.frame_search1.setObjectName("frame_search1")
         self.frame_search.setVisible(False)
+        self.img_labelSearch = QtWidgets.QLabel(self.frame_search1)
 
 
         MainWindow.setCentralWidget(self.centralwidget)
@@ -641,8 +651,245 @@ class Ui_MainWindow(object):
         self.label_search5.setVisible(False)
         self.label_search6.setVisible(False)
         self.frame_search.setVisible(True)
+
         
+
+
+    #Show query results in the search page
+    def showResults(self, cursor):
+        self.cursorArray = list(cursor)
+        self.totalResults = len(self.cursorArray)
+        self.position = 0
+        self.label_results.setText(str(self.totalResults) + " Results.")
+        self.pushButton_next.setDisabled(True)
+        self.pushButton_previous.setDisabled(True)
+
+        if self.totalResults == 0:
+            self.label_result1.clear()
+            self.label_result2.clear()
+            self.label_result3.clear()
+            self.label_result4.clear()
+            self.label_result5.clear()
+            self.label_result6.clear()
+            self.img_labelSearch.clear()
+            self.label_search1.setVisible(False)
+            self.label_search2.setVisible(False)
+            self.label_search3.setVisible(False)
+            self.label_search4.setVisible(False)
+            self.label_search5.setVisible(False)
+            self.label_search6.setVisible(False)
+            self.label_result1.setVisible(False)
+            self.label_result2.setVisible(False)
+            self.label_result3.setVisible(False)
+            self.label_result4.setVisible(False)
+            self.label_result5.setVisible(False)
+            self.label_result6.setVisible(False)
+
         
+        else:
+            if self.totalResults > 1:
+                self.pushButton_next.setEnabled(True)
+
+            row = self.cursorArray[self.position]
+            self.label_result1.setText(str(row[0]))
+            self.label_result2.setText(row[1])
+            self.label_result3.setText(row[2])
+            self.label_result4.setText(row[3])
+            self.label_result5.setText(row[4])
+            self.label_result6.setText(row[5])
+            self.label_search1.setVisible(True)
+            self.label_search2.setVisible(True)
+            self.label_search3.setVisible(True)
+            self.label_search4.setVisible(True)
+            self.label_search5.setVisible(True)
+            self.label_search6.setVisible(True)
+            self.label_result1.setVisible(True)
+            self.label_result2.setVisible(True)
+            self.label_result3.setVisible(True)
+            self.label_result4.setVisible(True)
+            self.label_result5.setVisible(True)
+            self.label_result6.setVisible(True)
+
+            try:
+                fname = row[6]
+                print(fname)
+                if fname != "":
+                    pixmap = QtGui.QPixmap(fname)
+
+                    if pixmap.isNull():
+                        self.img_labelSearch.clear()
+                        self.img_labelSearch.setText('Image too large to preview. Please see the image in: ' + fname)
+                        self.img_labelSearch.resize(480,30)
+                    
+                    else:
+                        self.img_labelSearch.clear()
+                        pixmap = pixmap.scaled(480, 480, QtCore.Qt.AspectRatioMode.KeepAspectRatio)
+                        self.img_labelSearch.setPixmap(pixmap)
+                        self.img_labelSearch.setScaledContents(True)
+                        self.img_labelSearch.resize(pixmap.width(),pixmap.height())
+                    self.img_labelSearch.setVisible(True)
+                    self.frame_search1.setVisible(True)
+                    
+            except Exception as e:
+                qm = QtWidgets.QMessageBox
+                qm.critical(self.centralwidget,"Error", "An error has occurred, could not load the image." + '\nError code: ' + str(e), qm.StandardButton.Close, qm.StandardButton.Close)
+
+    
+    def nextResult(self):
+        self.position = self.position+1
+
+        if self.position < (self.totalResults-1):
+            self.pushButton_next.setEnabled(True)
+        else:
+            self.pushButton_next.setDisabled(True)
+
+        if self.position < self.totalResults:
+            row = self.cursorArray[self.position]
+            self.label_result1.setText(str(row[0]))
+            self.label_result2.setText(row[1])
+            self.label_result3.setText(row[2])
+            self.label_result4.setText(row[3])
+            self.label_result5.setText(row[4])
+            self.label_result6.setText(row[5])
+            self.label_search1.setVisible(True)
+            self.label_search2.setVisible(True)
+            self.label_search3.setVisible(True)
+            self.label_search4.setVisible(True)
+            self.label_search5.setVisible(True)
+            self.label_search6.setVisible(True)
+            self.label_result1.setVisible(True)
+            self.label_result2.setVisible(True)
+            self.label_result3.setVisible(True)
+            self.label_result4.setVisible(True)
+            self.label_result5.setVisible(True)
+            self.label_result6.setVisible(True)
+            self.pushButton_previous.setEnabled(True)
+
+            try:
+                fname = row[6]
+                print(fname)
+                if fname != "":
+                    pixmap = QtGui.QPixmap(fname)
+
+                    if pixmap.isNull():
+                        self.img_labelSearch.clear()
+                        self.img_labelSearch.setText('Image too large to preview. Please see the image in: ' + fname)
+                        self.img_labelSearch.resize(480,30)
+                    
+                    else:
+                        self.img_labelSearch.clear()
+                        pixmap = pixmap.scaled(480, 480, QtCore.Qt.AspectRatioMode.KeepAspectRatio)
+                        self.img_labelSearch.setPixmap(pixmap)
+                        self.img_labelSearch.setScaledContents(True)
+                        self.img_labelSearch.resize(pixmap.width(),pixmap.height())
+                    self.img_labelSearch.setVisible(True)
+                    self.frame_search1.setVisible(True)
+                    
+            except Exception as e:
+                qm = QtWidgets.QMessageBox
+                qm.critical(self.centralwidget,"Error", "An error has occurred, could not load the image." + '\nError code: ' + str(e), qm.StandardButton.Close, qm.StandardButton.Close)
+
+    
+    def prevResult(self):
+        self.position = self.position-1
+        if self.position <= 0:
+            self.pushButton_previous.setEnabled(False)
+        else:
+            self.pushButton_previous.setEnabled(True)
+
+        if self.position < self.totalResults:
+            row = self.cursorArray[self.position]
+            self.label_result1.setText(str(row[0]))
+            self.label_result2.setText(row[1])
+            self.label_result3.setText(row[2])
+            self.label_result4.setText(row[3])
+            self.label_result5.setText(row[4])
+            self.label_result6.setText(row[5])
+            self.label_search1.setVisible(True)
+            self.label_search2.setVisible(True)
+            self.label_search3.setVisible(True)
+            self.label_search4.setVisible(True)
+            self.label_search5.setVisible(True)
+            self.label_search6.setVisible(True)
+            self.label_result1.setVisible(True)
+            self.label_result2.setVisible(True)
+            self.label_result3.setVisible(True)
+            self.label_result4.setVisible(True)
+            self.label_result5.setVisible(True)
+            self.label_result6.setVisible(True)
+            self.pushButton_next.setEnabled(True)
+
+            try:
+                fname = row[6]
+                print(fname)
+                if fname != "":
+                    pixmap = QtGui.QPixmap(fname)
+
+                    if pixmap.isNull():
+                        self.img_labelSearch.clear()
+                        self.img_labelSearch.setText('Image too large to preview. Please see the image in: ' + fname)
+                        self.img_labelSearch.resize(480,30)
+                    
+                    else:
+                        self.img_labelSearch.clear()
+                        pixmap = pixmap.scaled(480, 480, QtCore.Qt.AspectRatioMode.KeepAspectRatio)
+                        self.img_labelSearch.setPixmap(pixmap)
+                        self.img_labelSearch.setScaledContents(True)
+                        self.img_labelSearch.resize(pixmap.width(),pixmap.height())
+                    self.img_labelSearch.setVisible(True)
+                    self.frame_search1.setVisible(True)
+                    
+            except Exception as e:
+                qm = QtWidgets.QMessageBox
+                qm.critical(self.centralwidget,"Error", "An error has occurred, could not load the image." + '\nError code: ' + str(e), qm.StandardButton.Close, qm.StandardButton.Close)
+
+
+
+
+    #Call query to search users
+    def searchUser(self):
+        item = self.comboBox.currentIndex()
+        if item == 0:
+            if self.lineEdit_filter.text().isdigit():
+                self.showResults(data.searchUsers("id", self.lineEdit_filter.text()))
+            else:
+                qm = QtWidgets.QMessageBox
+                qm.critical(self.centralwidget,"Error", "Please enter only digits for the ID number filter.", qm.StandardButton.Close, qm.StandardButton.Close)
+
+        elif item == 1:
+            if self.lineEdit_filter.text().replace(" ","").isalpha():
+                self.showResults(data.searchUsers("names", self.lineEdit_filter.text()))
+            else:
+                qm = QtWidgets.QMessageBox
+                qm.critical(self.centralwidget,"Error", "Please enter only alphabetic characters for the names filter.", qm.StandardButton.Close, qm.StandardButton.Close)
+        
+        elif item == 2:
+            if self.lineEdit_filter.text().replace(" ","").isalpha():
+                self.showResults(data.searchUsers("surnames", self.lineEdit_filter.text()))
+            else:
+                qm = QtWidgets.QMessageBox
+                qm.critical(self.centralwidget,"Error", "Please enter only alphabetic characters for the surnames filter.", qm.StandardButton.Close, qm.StandardButton.Close)
+        
+        elif item == 3:
+            if self.lineEdit_filter.text().replace(" ","").isalpha():
+                self.showResults(data.searchUsers("gender", self.lineEdit_filter.text()))
+            else:
+                qm = QtWidgets.QMessageBox
+                qm.critical(self.centralwidget,"Error", "Please enter only alphabetic characters for the gender filter.", qm.StandardButton.Close, qm.StandardButton.Close)
+        
+        elif item == 4:
+            if self.lineEdit_filter.text().replace(" ","").isalpha():
+                self.showResults(data.searchUsers("nationality", self.lineEdit_filter.text()))
+            else:
+                qm = QtWidgets.QMessageBox
+                qm.critical(self.centralwidget,"Error", "Please enter only alphabetic characters for the nationality filter.", qm.StandardButton.Close, qm.StandardButton.Close)
+
+        elif item == 5:
+            if self.lineEdit_filter.text().replace(" ","").isalnum():
+                self.showResults(data.searchUsers("dob", self.lineEdit_filter.text()))
+            else:
+                qm = QtWidgets.QMessageBox
+                qm.critical(self.centralwidget,"Error", "Please enter only alphanumeric characters for the date of birth filter.", qm.StandardButton.Close, qm.StandardButton.Close)
     
 if __name__ == "__main__":
     import sys

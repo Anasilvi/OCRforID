@@ -154,7 +154,7 @@ def readID(img, imgReSized, deltaX, deltaY):
     else:
         imgP = imgReSized
         conf = 0
-    results.append(['ID', text.strip(), conf])
+    results.append(['ID', text.strip().upper(), conf])
     return imgP
     
 def readNames(img, imgReSized, deltaX, deltaY):
@@ -176,7 +176,7 @@ def readNames(img, imgReSized, deltaX, deltaY):
     else:
         imgP = imgReSized
         conf = 0
-    results.append(['Names', text.strip(), conf])
+    results.append(['Names', text.strip().upper(), conf])
     return imgP
     
 
@@ -199,7 +199,7 @@ def readFamilyNames(img, imgReSized, deltaX, deltaY):
     else:
         imgP = imgReSized
         conf = 0
-    results.append(['FamilyNames', text.strip(), conf])
+    results.append(['FamilyNames', text.strip().upper(), conf])
     return imgP
 
 
@@ -222,7 +222,7 @@ def readGender(img, imgReSized, deltaX, deltaY):
     else:
         imgP = imgReSized
         conf = 0
-    results.append(['Gender', text.strip(), conf])
+    results.append(['Gender', text.strip().upper(), conf])
     return imgP
 
 def readNationality(img, imgReSized, deltaX, deltaY):
@@ -244,7 +244,7 @@ def readNationality(img, imgReSized, deltaX, deltaY):
     else:
         imgP = imgReSized
         conf = 0
-    results.append(['Nationality', text.strip(), conf])
+    results.append(['Nationality', text.strip().upper(), conf])
     return imgP
     
 def readDOB(img, imgReSized, deltaX, deltaY):
@@ -266,7 +266,7 @@ def readDOB(img, imgReSized, deltaX, deltaY):
     else:
         imgP = imgReSized
         conf = 0
-    results.append(['DOB', text.strip(), conf])
+    results.append(['DOB', text.strip().upper(), conf])
     return imgP
     
     
