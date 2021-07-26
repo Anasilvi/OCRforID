@@ -192,7 +192,7 @@ class Ui_MainWindow(object):
         self.pushButton_5.setFont(font)
         self.pushButton_5.setText("")
         icon2 = QtGui.QIcon()
-        icon2.addPixmap(QtGui.QPixmap(((os.path.dirname(os.path.realpath(__file__))+"\\resources\\helpIcon.png"))), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
+        icon2.addPixmap(QtGui.QPixmap(((os.path.dirname(os.path.realpath(__file__))+"\\resources\\infoIcon.png"))), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         self.pushButton_5.setIcon(icon2)
         self.pushButton_5.setIconSize(QtCore.QSize(150, 150))
         self.pushButton_5.setObjectName("pushButton_5")
@@ -208,7 +208,7 @@ class Ui_MainWindow(object):
         self.pushButton_5.raise_()
         #Creating top bar
         self.pushButton_New = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_New.setGeometry(QtCore.QRect(50, 0, 40, 40))
+        self.pushButton_New.setGeometry(QtCore.QRect(50, 0, 45, 40))
         self.pushButton_New.setText("")
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap((os.path.dirname(os.path.realpath(__file__))+"\\resources\\newIcon.png")), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
@@ -217,7 +217,7 @@ class Ui_MainWindow(object):
         self.pushButton_New.setObjectName("pushButton_New")
         self.pushButton_New.setVisible(False)
         self.pushButton_New.clicked.connect(self.newImage)
-        self.pushButton_New.setStyleSheet("QPushButton{background-color : transparent;} QPushButton::hover" "{" "background-color : rgb(229, 241, 251);""}")
+        self.pushButton_New.setStyleSheet("QPushButton{background-color : transparent;} QPushButton::hover" "{" "background-color : rgb(47, 227, 194);""}")
         self.pushButton_Home = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_Home.setGeometry(QtCore.QRect(0, 0, 40, 40))
         self.pushButton_Home.setText("")
@@ -228,19 +228,10 @@ class Ui_MainWindow(object):
         self.pushButton_Home.setIconSize(QtCore.QSize(35, 35))
         self.pushButton_Home.setObjectName("pushButton_Home")
         self.pushButton_Home.setVisible(False)
-        self.pushButton_Home.setStyleSheet("QPushButton{background-color : transparent;} QPushButton::hover" "{" "background-color : rgb(229, 241, 251);""}")
-        self.pushButton_Help2 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_Help2.setGeometry(QtCore.QRect(970, 0, 40, 40))
-        self.pushButton_Help2.setText("")
-        icon2 = QtGui.QIcon()
-        icon2.addPixmap(QtGui.QPixmap((os.path.dirname(os.path.realpath(__file__))+"\\resources\\infoIcon.png")), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
-        self.pushButton_Help2.setIcon(icon2)
-        self.pushButton_Help2.setIconSize(QtCore.QSize(40, 40))
-        self.pushButton_Help2.setObjectName("pushButton_Help2")
-        self.pushButton_Help2.setVisible(False)
-        self.pushButton_Help2.setStyleSheet("QPushButton{background-color : transparent;} QPushButton::hover" "{" "background-color : rgb(229, 241, 251);""}")
+        self.pushButton_Home.setStyleSheet("QPushButton{background-color : transparent;} QPushButton::hover" "{" "background-color : rgb(47, 227, 194);""}")
+        
         self.pushButton_Settings = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_Settings.setGeometry(QtCore.QRect(920, 0, 40, 40))
+        self.pushButton_Settings.setGeometry(QtCore.QRect(969, 0, 40, 40))
         self.pushButton_Settings.setText("")
         icon2 = QtGui.QIcon()
         icon2.addPixmap(QtGui.QPixmap((os.path.dirname(os.path.realpath(__file__))+"\\resources\\settingsIcon.png")), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
@@ -248,7 +239,7 @@ class Ui_MainWindow(object):
         self.pushButton_Settings.setIconSize(QtCore.QSize(40, 40))
         self.pushButton_Settings.setObjectName("pushButton_Settings")
         self.pushButton_Settings.setVisible(False)
-        self.pushButton_Settings.setStyleSheet("QPushButton{background-color : transparent;} QPushButton::hover" "{" "background-color : rgb(229, 241, 251);""}")
+        self.pushButton_Settings.setStyleSheet("QPushButton{background-color : transparent;} QPushButton::hover" "{" "background-color : rgb(47, 227, 194);""}")
 
         #Creating search page
         self.frame_search = QtWidgets.QFrame(self.centralwidget)
@@ -264,7 +255,7 @@ class Ui_MainWindow(object):
         self.groupBox_search.setFont(font)
         self.groupBox_search.setObjectName("groupBox_search")
         self.pushButton_search = QtWidgets.QPushButton(self.groupBox_search)
-        self.pushButton_search.setGeometry(QtCore.QRect(350, 70, 131, 31))
+        self.pushButton_search.setGeometry(QtCore.QRect(350, 110, 131, 31))
         self.pushButton_search.setObjectName("pushButton_search")
         self.pushButton_search.clicked.connect(self.searchUser)
         self.formLayoutWidget = QtWidgets.QWidget(self.groupBox_search)
@@ -384,7 +375,7 @@ class Ui_MainWindow(object):
         self.label_results.setAlignment(QtCore.Qt.AlignmentFlag.AlignBottom|QtCore.Qt.AlignmentFlag.AlignLeading|QtCore.Qt.AlignmentFlag.AlignLeft)
         self.label_results.setObjectName("label_results")
         self.comboBox = QtWidgets.QComboBox(self.groupBox_search)
-        self.comboBox.setGeometry(QtCore.QRect(10, 30, 161, 21))
+        self.comboBox.setGeometry(QtCore.QRect(10, 30, 170, 24))
         self.comboBox.setObjectName("comboBox")
         self.comboBox.addItem("")
         self.comboBox.addItem("")
@@ -410,6 +401,13 @@ class Ui_MainWindow(object):
         self.frame_search1.setObjectName("frame_search1")
         self.frame_search.setVisible(False)
         self.img_labelSearch = QtWidgets.QLabel(self.frame_search1)
+        self.radioButton = QtWidgets.QRadioButton(self.groupBox_search)
+        self.radioButton.setGeometry(QtCore.QRect(190, 75, 111, 18))
+        self.radioButton.setObjectName("radioButton")
+        self.radioButton.setChecked(True)
+        self.radioButton_2 = QtWidgets.QRadioButton(self.groupBox_search)
+        self.radioButton_2.setGeometry(QtCore.QRect(340, 75, 131, 18))
+        self.radioButton_2.setObjectName("radioButton_2")
 
 
         MainWindow.setCentralWidget(self.centralwidget)
@@ -468,6 +466,8 @@ class Ui_MainWindow(object):
         self.comboBox.setItemText(5, _translate("MainWindow", "Date of Birth"))
         self.pushButton_previous.setText(_translate("MainWindow", "Previous"))
         self.groupBox_image.setTitle(_translate("MainWindow", "Image"))
+        self.radioButton.setText(_translate("MainWindow", "Exact match"))
+        self.radioButton_2.setText(_translate("MainWindow", "Partial match"))
 
 
     #Function to show the main page
@@ -476,7 +476,6 @@ class Ui_MainWindow(object):
         self.frame_2.setVisible(True)
         self.frame.setVisible(True)
         self.img_label.setVisible(True)
-        self.pushButton_Help2.setVisible(True)
         self.pushButton_Home.setVisible(True)
         self.pushButton_New.setVisible(True)
         self.pushButton_Settings.setVisible(True)
@@ -527,26 +526,44 @@ class Ui_MainWindow(object):
             self.lineEdit.setText(imgResults[2][0][1])
             if imgResults[2][0][2] < core.minCI:
                 self.lineEdit.setStyleSheet("color: red;")
+            
+            else:
+                self.lineEdit.setStyleSheet("color: green;")
 
             self.lineEdit_2.setText(imgResults[2][1][1])
             if imgResults[2][1][2] < core.minCI:
                 self.lineEdit_2.setStyleSheet("color: red;")
+            
+            else:
+                self.lineEdit_2.setStyleSheet("color: green;")
 
             self.lineEdit_3.setText(imgResults[2][2][1])
             if imgResults[2][2][2] < core.minCI:
                 self.lineEdit_3.setStyleSheet("color: red;")
 
+            else:
+                self.lineEdit_3.setStyleSheet("color: green;")
+
             self.lineEdit_4.setText(imgResults[2][3][1])
             if imgResults[2][3][2] < core.minCI:
                 self.lineEdit_4.setStyleSheet("color: red;")
+
+            else:
+                self.lineEdit_4.setStyleSheet("color: green;")
 
             self.lineEdit_5.setText(imgResults[2][4][1])
             if imgResults[2][4][2] < core.minCI:
                 self.lineEdit_5.setStyleSheet("color: red;")
 
+            else:
+                self.lineEdit_5.setStyleSheet("color: green;")
+
             self.lineEdit_6.setText(imgResults[2][5][1])
             if imgResults[2][5][2] < core.minCI:
                 self.lineEdit_6.setStyleSheet("color: red;")
+            
+            else:
+                self.lineEdit_6.setStyleSheet("color: green;")
 
             self.frame_2.setVisible(True)
             self.pushButton_2.setEnabled(True)
@@ -560,7 +577,6 @@ class Ui_MainWindow(object):
         self.frame_3.setVisible(True)
         self.pushButton_Settings.setVisible(False)
         
-        self.pushButton_Help2.setVisible(False)
         self.pushButton_Home.setVisible(False)
         self.pushButton_New.setVisible(False)
         self.pathImage = ''
@@ -640,7 +656,6 @@ class Ui_MainWindow(object):
         self.frame_2.setVisible(False)
         self.frame.setVisible(False)
         self.img_label.setVisible(False)
-        self.pushButton_Help2.setVisible(True)
         self.pushButton_Home.setVisible(True)
         self.pushButton_New.setVisible(False)
         self.pushButton_Settings.setVisible(True)
@@ -845,48 +860,47 @@ class Ui_MainWindow(object):
 
 
 
-
     #Call query to search users
     def searchUser(self):
         item = self.comboBox.currentIndex()
         if item == 0:
             if self.lineEdit_filter.text().isdigit():
-                self.showResults(data.searchUsers("id", self.lineEdit_filter.text()))
+                self.showResults(data.searchUsers("id", self.lineEdit_filter.text(), self.radioButton.isChecked()))
             else:
                 qm = QtWidgets.QMessageBox
                 qm.critical(self.centralwidget,"Error", "Please enter only digits for the ID number filter.", qm.StandardButton.Close, qm.StandardButton.Close)
 
         elif item == 1:
             if self.lineEdit_filter.text().replace(" ","").isalpha():
-                self.showResults(data.searchUsers("names", self.lineEdit_filter.text()))
+                self.showResults(data.searchUsers("names", self.lineEdit_filter.text(), self.radioButton.isChecked()))
             else:
                 qm = QtWidgets.QMessageBox
                 qm.critical(self.centralwidget,"Error", "Please enter only alphabetic characters for the names filter.", qm.StandardButton.Close, qm.StandardButton.Close)
         
         elif item == 2:
             if self.lineEdit_filter.text().replace(" ","").isalpha():
-                self.showResults(data.searchUsers("surnames", self.lineEdit_filter.text()))
+                self.showResults(data.searchUsers("surnames", self.lineEdit_filter.text(), self.radioButton.isChecked()))
             else:
                 qm = QtWidgets.QMessageBox
                 qm.critical(self.centralwidget,"Error", "Please enter only alphabetic characters for the surnames filter.", qm.StandardButton.Close, qm.StandardButton.Close)
         
         elif item == 3:
             if self.lineEdit_filter.text().replace(" ","").isalpha():
-                self.showResults(data.searchUsers("gender", self.lineEdit_filter.text()))
+                self.showResults(data.searchUsers("gender", self.lineEdit_filter.text(), self.radioButton.isChecked()))
             else:
                 qm = QtWidgets.QMessageBox
                 qm.critical(self.centralwidget,"Error", "Please enter only alphabetic characters for the gender filter.", qm.StandardButton.Close, qm.StandardButton.Close)
         
         elif item == 4:
             if self.lineEdit_filter.text().replace(" ","").isalpha():
-                self.showResults(data.searchUsers("nationality", self.lineEdit_filter.text()))
+                self.showResults(data.searchUsers("nationality", self.lineEdit_filter.text(), self.radioButton.isChecked()))
             else:
                 qm = QtWidgets.QMessageBox
                 qm.critical(self.centralwidget,"Error", "Please enter only alphabetic characters for the nationality filter.", qm.StandardButton.Close, qm.StandardButton.Close)
 
         elif item == 5:
             if self.lineEdit_filter.text().replace(" ","").isalnum():
-                self.showResults(data.searchUsers("dob", self.lineEdit_filter.text()))
+                self.showResults(data.searchUsers("dob", self.lineEdit_filter.text(), self.radioButton.isChecked()))
             else:
                 qm = QtWidgets.QMessageBox
                 qm.critical(self.centralwidget,"Error", "Please enter only alphanumeric characters for the date of birth filter.", qm.StandardButton.Close, qm.StandardButton.Close)

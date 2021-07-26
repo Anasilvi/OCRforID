@@ -56,14 +56,19 @@ def getAllUsers():
         for row in data:
             print(row)
 
-#Query to get the table
-def searchUsers(filter, value):
+#Query to search the exact match
+def searchUsers(filter, value, exact):
     if filter == 'id':
         with con:
             data = con.execute("SELECT * FROM USER WHERE id = " + value)
             return data
     else:
-        with con:
-            data = con.execute("SELECT * FROM USER WHERE " + filter + " like '" + value.upper() + "'") 
-            return data
+        if exact:
+            with con:
+                data = con.execute("SELECT * FROM USER WHERE " + filter + " like '" + value.upper() + "'") 
+                return data
+        else:
+            with con:
+                data = con.execute("SELECT * FROM USER WHERE " + filter + " like '%" + value.upper() + "%'") 
+                return data
 
