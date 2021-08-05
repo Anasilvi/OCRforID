@@ -121,7 +121,7 @@ def processImage(path):
     processFinish, newImg = getData(img, imgReSized, deltaX, deltaY)[:2]
 
     if processFinish:
-        print('Saved image', cv2.imwrite(((os.path.dirname(os.path.realpath(__file__))+"\\tmp\\imageTmp.jpg")), newImg))
+        cv2.imwrite(((os.path.dirname(os.path.realpath(__file__))+"\\tmp\\imageTmp.jpg")), newImg)
         return processFinish, (os.path.dirname(os.path.realpath(__file__))+"\\tmp\\imageTmp.jpg"), results
     else:
         return processFinish, 'Error processing the image.', results

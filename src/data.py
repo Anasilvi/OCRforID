@@ -34,7 +34,6 @@ def searchTable():
             select name from sqlite_master where type = 'table';
         """)
         if len(table.fetchall()) == 0:
-            print('creating table')
             createTable()
 
 #Query to insert a row

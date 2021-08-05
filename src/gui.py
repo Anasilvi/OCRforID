@@ -197,6 +197,7 @@ class Ui_MainWindow(object):
         self.pushButton_5.setIconSize(QtCore.QSize(150, 150))
         self.pushButton_5.setObjectName("pushButton_5")
         self.pushButton_5.setStyleSheet("QPushButton{background-color : transparent;} QPushButton::hover" "{" "background-color : rgb(229, 241, 251);""}")
+        self.pushButton_5.clicked.connect(self.helpPage)
         #Adding background
         self.label_Background = QtWidgets.QLabel(self.frame_3)
         self.label_Background.setGeometry(QtCore.QRect(0, 0, 1010, 600))
@@ -240,6 +241,7 @@ class Ui_MainWindow(object):
         self.pushButton_Settings.setObjectName("pushButton_Settings")
         self.pushButton_Settings.setVisible(False)
         self.pushButton_Settings.setStyleSheet("QPushButton{background-color : transparent;} QPushButton::hover" "{" "background-color : rgb(47, 227, 194);""}")
+        self.pushButton_Settings.clicked.connect(self.changeCI)
 
         #Creating search page
         self.frame_search = QtWidgets.QFrame(self.centralwidget)
@@ -255,7 +257,7 @@ class Ui_MainWindow(object):
         self.groupBox_search.setFont(font)
         self.groupBox_search.setObjectName("groupBox_search")
         self.pushButton_search = QtWidgets.QPushButton(self.groupBox_search)
-        self.pushButton_search.setGeometry(QtCore.QRect(350, 110, 131, 31))
+        self.pushButton_search.setGeometry(QtCore.QRect(350, 120, 131, 31))
         self.pushButton_search.setObjectName("pushButton_search")
         self.pushButton_search.clicked.connect(self.searchUser)
         self.formLayoutWidget = QtWidgets.QWidget(self.groupBox_search)
@@ -383,6 +385,14 @@ class Ui_MainWindow(object):
         self.comboBox.addItem("")
         self.comboBox.addItem("")
         self.comboBox.addItem("")
+        self.comboBox.activated.connect(self.format)
+        self.label_format = QtWidgets.QLabel(self.groupBox_search)
+        self.label_format.setGeometry(QtCore.QRect(340, 50, 170, 24))
+        self.label_format.setFont(font)
+        self.label_format.setAlignment(QtCore.Qt.AlignmentFlag.AlignBottom|QtCore.Qt.AlignmentFlag.AlignLeading|QtCore.Qt.AlignmentFlag.AlignLeft)
+        self.label_format.setObjectName("label_format")
+        self.label_format.setText('Format: 28FEB1990')
+        self.label_format.setVisible(False)
         self.pushButton_previous = QtWidgets.QPushButton(self.groupBox_search)
         self.pushButton_previous.setGeometry(QtCore.QRect(10, 520, 131, 31))
         self.pushButton_previous.setObjectName("pushButton_previous")
@@ -402,12 +412,26 @@ class Ui_MainWindow(object):
         self.frame_search.setVisible(False)
         self.img_labelSearch = QtWidgets.QLabel(self.frame_search1)
         self.radioButton = QtWidgets.QRadioButton(self.groupBox_search)
-        self.radioButton.setGeometry(QtCore.QRect(190, 75, 111, 18))
+        self.radioButton.setGeometry(QtCore.QRect(190, 85, 111, 18))
         self.radioButton.setObjectName("radioButton")
         self.radioButton.setChecked(True)
         self.radioButton_2 = QtWidgets.QRadioButton(self.groupBox_search)
-        self.radioButton_2.setGeometry(QtCore.QRect(340, 75, 131, 18))
+        self.radioButton_2.setGeometry(QtCore.QRect(340, 85, 131, 18))
         self.radioButton_2.setObjectName("radioButton_2")
+
+         #Creating help page
+        self.frame_help = QtWidgets.QFrame(self.centralwidget)
+        self.frame_help.setGeometry(QtCore.QRect(0, 0, 1010, 600))
+        self.frame_help.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
+        self.frame_help.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
+        self.frame_help.setObjectName("frame_help")
+        #Adding background to help page
+        self.label_help = QtWidgets.QLabel(self.frame_help)
+        self.label_help.setGeometry(QtCore.QRect(0, 40, 1010, 600))
+        self.label_help.setText("")
+        self.label_help.setPixmap(QtGui.QPixmap((os.path.dirname(os.path.realpath(__file__))+"\\resources\\helpPage.png")))
+        self.label_help.setObjectName("label_help")
+        self.frame_help.setVisible(False)
 
 
         MainWindow.setCentralWidget(self.centralwidget)
@@ -480,6 +504,20 @@ class Ui_MainWindow(object):
         self.pushButton_New.setVisible(True)
         self.pushButton_Settings.setVisible(True)
 
+    #Function to show the help page
+    def helpPage(self):
+        self.frame_3.setVisible(False)
+        self.frame_2.setVisible(False)
+        self.frame.setVisible(False)
+        self.img_label.setVisible(False)
+        self.pushButton_Home.setVisible(False)
+        self.pushButton_New.setVisible(False)
+        self.pushButton_Settings.setVisible(False)
+        self.frame_help.setVisible(True)
+        self.pushButton_Home.setVisible(True)
+        self.pushButton_Home.raise_()
+        self.pushButton_Home.setEnabled(True)
+
     #Function to open a file
     def getfile(self):
         try:
@@ -511,7 +549,6 @@ class Ui_MainWindow(object):
     
     #Function to process the image
     def processImage(self):
-        print(self.pathImage)
         #Initialze QtGui.QImage() with arguments data, height, width, and QImage.Format
         imgResults = core.processImage(self.pathImage)
         
@@ -567,8 +604,8 @@ class Ui_MainWindow(object):
 
             self.frame_2.setVisible(True)
             self.pushButton_2.setEnabled(True)
-        else:
-            print(imgResults[1])
+            os.remove((os.path.dirname(os.path.realpath(__file__))+"\\tmp\\imageTmp.jpg"))
+       
         
     #Function to get back home page
     def showHomePage(self):
@@ -576,6 +613,7 @@ class Ui_MainWindow(object):
         self.frame_search.setVisible(False)
         self.frame_3.setVisible(True)
         self.pushButton_Settings.setVisible(False)
+        self.frame_help.setVisible(False)
         
         self.pushButton_Home.setVisible(False)
         self.pushButton_New.setVisible(False)
@@ -727,7 +765,6 @@ class Ui_MainWindow(object):
 
             try:
                 fname = row[6]
-                print(fname)
                 if fname != "":
                     pixmap = QtGui.QPixmap(fname)
 
@@ -782,7 +819,7 @@ class Ui_MainWindow(object):
 
             try:
                 fname = row[6]
-                print(fname)
+                
                 if fname != "":
                     pixmap = QtGui.QPixmap(fname)
 
@@ -836,7 +873,7 @@ class Ui_MainWindow(object):
 
             try:
                 fname = row[6]
-                print(fname)
+                
                 if fname != "":
                     pixmap = QtGui.QPixmap(fname)
 
@@ -905,6 +942,20 @@ class Ui_MainWindow(object):
                 qm = QtWidgets.QMessageBox
                 qm.critical(self.centralwidget,"Error", "Please enter only alphanumeric characters for the date of birth filter.", qm.StandardButton.Close, qm.StandardButton.Close)
     
+    #Function to change the confidence level
+    def changeCI(self):
+        text, ok = QtWidgets.QInputDialog.getText(self.centralwidget, 'Settings',    'The confidence level by default is 90%. Enter the new confidence level (only numbers):')
+        if ok and text.isdigit():
+            core.minCI = int(text)
+
+    def format(self):
+        item = self.comboBox.currentIndex()
+        if item == 5:
+            self.label_format.setVisible(True)
+        else:
+            self.label_format.setVisible(False)
+
+
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
