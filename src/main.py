@@ -23,6 +23,12 @@ class Ui_MainWindow(object):
 
     pathImage = ''
     def setupUi(self, MainWindow):
+        """Function to do create all the components for the GUI.
+
+        Args:
+            MainWindow(QMainWindow): The main window of the GUI.
+
+        """ 
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1010, 618)
         MainWindow.setMinimumSize(QtCore.QSize(1000, 600))
@@ -454,6 +460,12 @@ class Ui_MainWindow(object):
            qm.critical(self.centralwidget,"Error", "An error has occurred, could not load the database." + '\nError code: ' + str(e), qm.StandardButton.Close, qm.StandardButton.Close)
 
     def retranslateUi(self, MainWindow):
+        """Function to do initialize all the components for the GUI.
+
+        Args:
+            MainWindow(QMainWindow): The main window of the GUI.
+
+        """
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "ID Reader"))
         self.groupBox.setTitle(_translate("MainWindow", "Image"))
@@ -493,9 +505,8 @@ class Ui_MainWindow(object):
         self.radioButton.setText(_translate("MainWindow", "Exact match"))
         self.radioButton_2.setText(_translate("MainWindow", "Partial match"))
 
-
-    #Function to show the main page
     def showMainPage(self):
+        """Function to show all the components of the main page in the GUI."""
         self.frame_3.setVisible(False)
         self.frame_2.setVisible(True)
         self.frame.setVisible(True)
@@ -504,8 +515,8 @@ class Ui_MainWindow(object):
         self.pushButton_New.setVisible(True)
         self.pushButton_Settings.setVisible(True)
 
-    #Function to show the help page
     def helpPage(self):
+        """Function to show all the components of the help page in the GUI."""
         self.frame_3.setVisible(False)
         self.frame_2.setVisible(False)
         self.frame.setVisible(False)
@@ -518,8 +529,8 @@ class Ui_MainWindow(object):
         self.pushButton_Home.raise_()
         self.pushButton_Home.setEnabled(True)
 
-    #Function to open a file
     def getfile(self):
+        """Function to open an image to process. Save the path of the image"""
         try:
             fDialog = QtWidgets.QFileDialog()
             file_filter = 'Image File (*.jpg *.jpeg *.png)'
@@ -547,8 +558,8 @@ class Ui_MainWindow(object):
             qm = QtWidgets.QMessageBox
             qm.critical(self.centralwidget,"Error", "An error has occurred, could not load the image." + '\nError code: ' + str(e), qm.StandardButton.Close, qm.StandardButton.Close)
     
-    #Function to process the image
     def processImage(self):
+        """Function to process the image when the save button is clicked."""
         #Initialze QtGui.QImage() with arguments data, height, width, and QImage.Format
         imgResults = core.processImage(self.pathImage)
         
@@ -606,9 +617,8 @@ class Ui_MainWindow(object):
             self.pushButton_2.setEnabled(True)
             os.remove((os.path.dirname(os.path.realpath(__file__))+"\\tmp\\imageTmp.jpg"))
        
-        
-    #Function to get back home page
     def showHomePage(self):
+        """Function to get back home page when the home button is clicked."""
         self.frame_2.setVisible(False)
         self.frame_search.setVisible(False)
         self.frame_3.setVisible(True)
@@ -628,8 +638,8 @@ class Ui_MainWindow(object):
         core.results = []
         core.processFinish = False
 
-    #Function to open a new image
     def newImage(self):
+        """Function to open a new image when the new image button is clicked."""
         if self.pathImage != '':
             qm = QtWidgets.QMessageBox
             ans = qm.warning(self.centralwidget,"Warning", "When open a new image data not saved will be lost. Are you sure to continue?", qm.StandardButton.Yes | qm.StandardButton.No, qm.StandardButton.No)
@@ -651,8 +661,8 @@ class Ui_MainWindow(object):
         else:
             self.getfile()
 
-    #Function to clean main page
     def newPage(self):
+        """Function to clean main page when a new image is opened."""
         self.pathImage = ''
         self.img_label.clear()
         self.lineEdit.clear()
@@ -666,8 +676,8 @@ class Ui_MainWindow(object):
         self.pushButton_2.setEnabled(False)
         self.pushButton.setEnabled(False)
 
-
     def saveData(self):
+        """Function to save the data extracted when the save button is clicked."""
         try:
             modifiedData = [self.lineEdit.text(), self.lineEdit_2.text(), self.lineEdit_3.text(), self.lineEdit_4.text(), self.lineEdit_5.text(), self.lineEdit_6.text(), self.pathImage]
             saved = data.saveUser(modifiedData)
@@ -687,9 +697,8 @@ class Ui_MainWindow(object):
            qm = QtWidgets.QMessageBox
            qm.critical(self.centralwidget,"Error", "An error has occurred, could not save data." + '\nError code: ' + str(e), qm.StandardButton.Close, qm.StandardButton.Close)
 
-    
-    #Show search page
     def showSearchPage(self):
+        """Function to show the search page when the search ID button is clicked."""
         self.frame_3.setVisible(False)
         self.frame_2.setVisible(False)
         self.frame.setVisible(False)
@@ -705,11 +714,8 @@ class Ui_MainWindow(object):
         self.label_search6.setVisible(False)
         self.frame_search.setVisible(True)
 
-        
-
-
-    #Show query results in the search page
     def showResults(self, cursor):
+        """Function to show query results in the search page when the search button is clicked."""
         self.cursorArray = list(cursor)
         self.totalResults = len(self.cursorArray)
         self.position = 0
@@ -785,9 +791,9 @@ class Ui_MainWindow(object):
             except Exception as e:
                 qm = QtWidgets.QMessageBox
                 qm.critical(self.centralwidget,"Error", "An error has occurred, could not load the image." + '\nError code: ' + str(e), qm.StandardButton.Close, qm.StandardButton.Close)
-
     
     def nextResult(self):
+        """Function to show the next result when the next button is clicked."""
         self.position = self.position+1
 
         if self.position < (self.totalResults-1):
@@ -840,9 +846,9 @@ class Ui_MainWindow(object):
             except Exception as e:
                 qm = QtWidgets.QMessageBox
                 qm.critical(self.centralwidget,"Error", "An error has occurred, could not load the image." + '\nError code: ' + str(e), qm.StandardButton.Close, qm.StandardButton.Close)
-
     
     def prevResult(self):
+        """Function to show the previous result when the previous button is clicked."""
         self.position = self.position-1
         if self.position <= 0:
             self.pushButton_previous.setEnabled(False)
@@ -895,10 +901,8 @@ class Ui_MainWindow(object):
                 qm = QtWidgets.QMessageBox
                 qm.critical(self.centralwidget,"Error", "An error has occurred, could not load the image." + '\nError code: ' + str(e), qm.StandardButton.Close, qm.StandardButton.Close)
 
-
-
-    #Call query to search users
     def searchUser(self):
+        """Function to call the query to search users into the database."""
         item = self.comboBox.currentIndex()
         if item == 0:
             if self.lineEdit_filter.text().isdigit():
@@ -942,13 +946,14 @@ class Ui_MainWindow(object):
                 qm = QtWidgets.QMessageBox
                 qm.critical(self.centralwidget,"Error", "Please enter only alphanumeric characters for the date of birth filter.", qm.StandardButton.Close, qm.StandardButton.Close)
     
-    #Function to change the confidence level
     def changeCI(self):
+        """Function to change the confidence level for this session, not persistent."""
         text, ok = QtWidgets.QInputDialog.getText(self.centralwidget, 'Settings',    'The confidence level by default is 90%. Enter the new confidence level (only numbers):')
         if ok and text.isdigit():
             core.minCI = int(text)
 
     def format(self):
+        """Function to show the format label for the Date of Birth."""
         item = self.comboBox.currentIndex()
         if item == 5:
             self.label_format.setVisible(True)
