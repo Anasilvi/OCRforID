@@ -19,6 +19,7 @@ ID Reader is a tool that helps users to extract data from images of ID documents
 
 ## Requirements:
 Before you run the program, you have to make sure to install the following packages (could be with "pip install") and software required.
+
 _Python packages:_
 Package | Version
 ------------ | -------------
@@ -28,7 +29,8 @@ pytesseract | 0.3.7 or higher
 PyQt6 | 6.1.0 or higher
 
 _Software:_
-Tesseract: you have to install tesseract OCR engine in your computer. Follow the next steps to do it:
+
+* Tesseract: you have to install tesseract OCR engine in your computer. Follow the next steps to do it:
 * Download the installer for Windows here: https://github.com/UB-Mannheim/tesseract/wiki
 * Install the software and search the installation folder, usually is in the path: C:\Program Files\Tesseract-OCR
 * Add the path to "Path" environment variable
