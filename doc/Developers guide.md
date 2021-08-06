@@ -53,5 +53,11 @@ The following diagram shows a summarized architecture of the software.
 
 ![Classes diagram](/doc/classes.jpg)
 
+## Methods documentation:
+Please consult the following documents for the methods documentation.
+*   [Main class](https://github.com/Anasilvi/OCRforID/tree/main/doc/main.html)
+*   [Core class](https://github.com/Anasilvi/OCRforID/tree/main/doc/core.html)
+*   [Data class](https://github.com/Anasilvi/OCRforID/tree/main/doc/data.html)
+
 ## Future work:
 An administrator module must be implemented. The admin has to be allowed to configure more types of documents by templates and positions. This will improve the current work and permit it to expand to more applications and businesses. 
