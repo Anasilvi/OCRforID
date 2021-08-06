@@ -39,5 +39,6 @@ You don't need to have extense knowledge about OCR, but minimum knowledge about 
 
 ## User workflow:
 The following diagram represents the user activity flow within the software. The main tasks are amplified to exemplify the program's functionalities.
+
 ![User workflow diagram](/doc/userflow.png)
 
