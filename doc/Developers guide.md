@@ -42,3 +42,16 @@ The following diagram represents the user activity flow within the software. The
 
 ![User workflow diagram](/doc/userflow.png)
 
+## Technical flow:
+The following diagram represents the technical flow within the software. All tasks are included to show the complete scenario of use.
+
+![Thechnical workflow diagram](/doc/uml.png)
+
+## Classes diagram:
+A Model-View-Controller (MVC) architecture pattern was used to implement the classes in the code. The three main logical components are: the model (which will contain the logic and the data model), the view (which will contain the GUI) and the controller (which will be the orchestrator between the model and the view).
+The following diagram shows a summarized architecture of the software.
+
+![Classes diagram](/doc/classes.jpg)
+
+## Future work:
+An administrator module must be implemented. The admin has to be allowed to configure more types of documents by templates and positions. This will improve the current work and permit it to expand to more applications and businesses. 
