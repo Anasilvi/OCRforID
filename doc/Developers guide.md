@@ -56,7 +56,7 @@ The following diagram shows a summarized architecture of the software.
 ## Methods documentation:
 Please consult the following documents for the methods documentation.
 *   [Main class](https://github.com/Anasilvi/OCRforID/tree/main/doc/main.html)
-*   [Core class](https://github.com/Anasilvi/OCRforID/tree/main/doc/core.html)
+*   [Core class](https://htmlpreview.github.io/?https://github.com/Anasilvi/OCRforID/blob/main/doc/core.html)
 *   [Data class](https://github.com/Anasilvi/OCRforID/tree/main/doc/data.html)
 
 ## Future work:
