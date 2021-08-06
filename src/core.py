@@ -138,7 +138,7 @@ def readID(img, imgReSized, deltaX, deltaY):
     txtconf = pytesseract.image_to_data(roi, "spa",output_type=Output.DICT)
  
     #Calculating the confidence level, mean of the CI per character
-    txtconf = [int(i) for i in txtconf['conf'] if i != '-1' ]
+    txtconf = [int(float(i)) for i in txtconf['conf'] if i != '-1' ]
     conf = 0
     if len(txtconf) > 0 and len(text.strip()) > 0:
         conf = mean(txtconf)
@@ -172,7 +172,7 @@ def readNames(img, imgReSized, deltaX, deltaY):
     txtconf = pytesseract.image_to_data(roi, "spa",output_type=Output.DICT)
     conf = 0
     #Calculating the confidence level, mean of the CI per character
-    txtconf = [int(i) for i in txtconf['conf'] if i != '-1' ]
+    txtconf = [int(float(i)) for i in txtconf['conf'] if i != '-1' ]
     if len(txtconf) > 0 and len(text.strip()) > 0:
         conf = mean(txtconf)
         #Drawing red rectangle for low confidence or green rectangle for higher confidence
@@ -205,7 +205,7 @@ def readFamilyNames(img, imgReSized, deltaX, deltaY):
     txtconf = pytesseract.image_to_data(roi, "spa",output_type=Output.DICT)
     conf = 0
     #Calculating the confidence level, mean of the CI per character
-    txtconf = [int(i) for i in txtconf['conf'] if i != '-1' ]
+    txtconf = [int(float(i)) for i in txtconf['conf'] if i != '-1' ]
     if len(txtconf) > 0 and len(text.strip()) > 0:
         conf = mean(txtconf)
         #Drawing red rectangle for low confidence or green rectangle for higher confidence
@@ -238,7 +238,7 @@ def readGender(img, imgReSized, deltaX, deltaY):
     txtconf = pytesseract.image_to_data(roi, "spa",output_type=Output.DICT)
     conf = 0
     #Calculating the confidence level, mean of the CI per character
-    txtconf = [int(i) for i in txtconf['conf'] if i != '-1' ]
+    txtconf = [int(float(i)) for i in txtconf['conf'] if i != '-1' ]
     if len(txtconf) > 0 and len(text.strip()) > 0:
         conf = mean(txtconf)
         #Drawing red rectangle for low confidence or green rectangle for higher confidence
@@ -271,7 +271,7 @@ def readNationality(img, imgReSized, deltaX, deltaY):
     txtconf = pytesseract.image_to_data(roi, "spa",output_type=Output.DICT)
     conf = 0
     #Calculating the confidence level, mean of the CI per character
-    txtconf = [int(i) for i in txtconf['conf'] if i != '-1' ]
+    txtconf = [int(float(i)) for i in txtconf['conf'] if i != '-1' ]
     if len(txtconf) > 0 and len(text.strip()) > 0:
         conf = mean(txtconf)
         #Drawing red rectangle for low confidence or green rectangle for higher confidence
@@ -304,7 +304,7 @@ def readDOB(img, imgReSized, deltaX, deltaY):
     txtconf = pytesseract.image_to_data(roi, "spa",output_type=Output.DICT)
     conf = 0
     #Calculating the confidence level, mean of the CI per character
-    txtconf = [int(i) for i in txtconf['conf'] if i != '-1' ]
+    txtconf = [int(float(i)) for i in txtconf['conf'] if i != '-1' ]
     if len(txtconf) > 0 and len(text.strip()) > 0:
         conf = mean(txtconf)
         #Drawing red rectangle for low confidence or green rectangle for higher confidence
